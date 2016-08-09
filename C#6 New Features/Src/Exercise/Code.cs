@@ -3,6 +3,16 @@ using System.Collections.Generic;
 
 namespace Exercise
 {
+
+    public class LevelInfo
+    {
+        public const string Info = "Info";
+        public const string Warning = "Warning";
+        public const string Trace = "Trace";
+        public const string Error = "Error";
+        public const string Fatal = "Fatal";
+    }
+
     public enum LoggerType
     {
         TextFile,
@@ -15,6 +25,7 @@ namespace Exercise
 
         public Person(string name)
         {
+            if(string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("street");
             Name = name;
         }
     }
@@ -24,6 +35,7 @@ namespace Exercise
 
         public Address(string street)
         {
+            if (string.IsNullOrWhiteSpace(street)) throw new ArgumentNullException("name");
             Street = street;
         }
     }
@@ -141,7 +153,7 @@ namespace Exercise
 
         public static ILogger Get(LoggerType type)
         {
-            if (Loggers.ContainsKey((type)))
+            if (Loggers.ContainsKey(type))
             {
                 return Loggers[type];
             }
@@ -201,32 +213,27 @@ namespace Exercise
 
         public void Info(LogMessage message)
         {
-            NullValidator.Check(message,"m");
-            Console.WriteLine("INFO " + message.Message);
+            Console.WriteLine(LevelInfo.Info  + " " + message.Message);
         }
 
         public void Error(LogMessage message)
         {
-            NullValidator.Check(message, "m");
-            Console.WriteLine("ERROR " + message);
+            Console.WriteLine(LevelInfo.Error + " " + message);
         }
 
         public void Warning(LogMessage message)
         {
-            NullValidator.Check(message, "m");
-            Console.WriteLine("WARNING " + message.Message);
+            Console.WriteLine(LevelInfo.Warning + " " + message.Message);
         }
 
         public void Fatal(LogMessage message)
         {
-            NullValidator.Check(message, "m");
-            Console.WriteLine("FATAL " + message);
+            Console.WriteLine(LevelInfo.Fatal + " " + message);
         }
 
         public void Trace(LogMessage message)
         {
-            NullValidator.Check(message, "m");
-            Console.WriteLine("TRACE " + message.Message);
+            Console.WriteLine(LevelInfo.Trace + " " + message.Message);
         }
     }
 }
