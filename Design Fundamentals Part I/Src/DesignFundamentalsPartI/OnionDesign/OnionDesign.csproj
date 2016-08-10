@@ -52,7 +52,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="After\" />
+    <Folder Include="After\Core\Contracts\" />
+    <Folder Include="After\Core\Handlers\" />
+    <Folder Include="After\Core\Models\" />
+    <Folder Include="After\Core\Services\" />
+    <Folder Include="After\Infraestructure\" />
+    <Folder Include="After\UI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Before\CodeMap.dgml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
