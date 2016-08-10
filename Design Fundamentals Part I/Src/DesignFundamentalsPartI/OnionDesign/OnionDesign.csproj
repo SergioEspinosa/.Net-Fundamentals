@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,11 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Before\1.UI\ApiController.cs" />
+    <Compile Include="Before\1.UI\CheckoutCompleteController.cs" />
+    <Compile Include="Before\2.Logic\NVPAPICaller.cs" />
+    <Compile Include="Before\2.Logic\NVPCodec.cs" />
+    <Compile Include="Before\2.Logic\ShoppingCartActions.cs" />
+    <Compile Include="Before\3.Data\OrderRepository.cs" />
+    <Compile Include="Before\3.Data\ShoppingCartRepository.cs" />
+    <Compile Include="Before\4.Model\Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="After\" />
-    <Folder Include="Before\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace CodeSmells.Inmobilidad
 {
@@ -20,6 +21,7 @@ namespace CodeSmells.Inmobilidad
             HttpClient.Context.Cache.Set("customerId:" + customerId, count++);
             dynamic repoCustomer = default(object);
             var customer = repoCustomer.GetById(customerId);
+            customer.Identity = HttpUtility.UrlEncode("");
             var notification = new CustomerNotification();
             //Code
             notification.Send(customer);
