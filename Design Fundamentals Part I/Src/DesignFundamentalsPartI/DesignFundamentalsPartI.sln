@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSmells", "CodeSmells\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOLID", "SOLID\SOLID.csproj", "{C76AC037-2053-4A5F-A72A-E1487CB92278}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnionDesign", "OnionDesign\OnionDesign.csproj", "{2204F34B-6A34-40EA-8D2E-8AF6A6C00584}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C76AC037-2053-4A5F-A72A-E1487CB92278}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C76AC037-2053-4A5F-A72A-E1487CB92278}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C76AC037-2053-4A5F-A72A-E1487CB92278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2204F34B-6A34-40EA-8D2E-8AF6A6C00584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2204F34B-6A34-40EA-8D2E-8AF6A6C00584}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2204F34B-6A34-40EA-8D2E-8AF6A6C00584}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2204F34B-6A34-40EA-8D2E-8AF6A6C00584}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,5 +40,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8F67B229-C051-4DAB-AA51-88FE0C10EC7F} = {563F4175-C93E-456B-9791-3B88A8AE3D15}
 		{C76AC037-2053-4A5F-A72A-E1487CB92278} = {672999FB-07F5-418A-87C0-44010C42EEDE}
+		{2204F34B-6A34-40EA-8D2E-8AF6A6C00584} = {8AB96808-5D00-4F4D-A46D-AFD06D8D4CF1}
 	EndGlobalSection
 EndGlobal

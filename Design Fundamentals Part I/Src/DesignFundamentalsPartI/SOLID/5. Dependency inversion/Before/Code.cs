@@ -1,8 +1,8 @@
-﻿using SOLID._5._Dependency_inversion.Before.LowLevel;
+﻿using SOLID._5._Dependency_inversion.Before.LowLevel.Plugin;
 
 namespace SOLID._5._Dependency_inversion.Before
 {
-    namespace HighLevel
+    namespace HighLevel.Important
     {
         class HighLevelClass
         {
@@ -18,7 +18,7 @@ namespace SOLID._5._Dependency_inversion.Before
         }
     }
 
-    namespace LowLevel
+    namespace LowLevel.Plugin
     {
         class LowLevelClass
         {
