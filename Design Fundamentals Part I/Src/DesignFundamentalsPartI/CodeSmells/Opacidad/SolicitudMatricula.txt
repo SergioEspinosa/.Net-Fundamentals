@@ -1,0 +1,2889 @@
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Constantes = Utpl.Syllabus.Recursos.Dal.Constantes;
+using DataPortal = Csla.DataPortal;
+using System.Text;
+
+namespace Utpl.Syllabus.Matricula.BL
+{
+    /// <summary>
+    /// Estereotipo: EditableRoot
+    /// Reponsabilidad: Representa una solicitud_matricula para un Estudiante    
+    /// </summary>
+    [Serializable]
+    [ObjectFactory("Object=SolicitudMatricula;Assembly=Utpl.Syllabus.Matricula.BL")]
+    //public class SolicitudMatricula : SyEditableRootBase<SolicitudMatricula>, IVersionable
+    public class SolicitudMatricula 
+    {
+
+        private static readonly ILogger log =
+           ServiceLocator.Current.GetInstance<ILoggerFactory>().Create(typeof(SolicitudMatricula));
+        #region Business Methods
+
+        #region < PROPIEDADES >
+
+        // EstudianteId
+        private static readonly PropertyInfo<int> EstudianteIdProperty = RegisterProperty<int>(o => o.EstudianteId);
+
+        private static PropertyInfo<> RegisterProperty<T>(Func<object, object> func)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Estudiante poseedor o dueño de esta matrícula
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int EstudianteId
+        {
+            get
+            {
+                return GetProperty(EstudianteIdProperty);
+            }
+            set
+            {
+                if (IsNew) SetProperty(EstudianteIdProperty, value);
+            }
+        }
+
+        private int GetProperty(PropertyInfo<int> estudianteIdProperty)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        // ProgramaAcademicoId
+        private static readonly PropertyInfo<int> ProgramaAcademicoIdProperty = RegisterProperty<int>(o => o.ProgramaAcademicoId);
+        /// <summary>
+        /// Identificador de Programa Academico
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int ProgramaAcademicoId
+        {
+            get { return GetProperty(ProgramaAcademicoIdProperty); }
+            internal set { SetProperty(ProgramaAcademicoIdProperty, value); }
+        }
+
+        // Numero
+        private static readonly PropertyInfo<string> NumeroProperty = RegisterProperty<string>(o => o.Numero);
+        /// <summary>
+        /// Numero de Solicitud
+        /// </summary>
+        public string Numero
+        {
+            get { return GetProperty(NumeroProperty); }
+            internal set { SetProperty(NumeroProperty, value); }
+        }
+
+
+        // PeriodoAcademicoId
+        private static readonly PropertyInfo<int> PeriodoAcademicoIdProperty = RegisterProperty<int>(o => o.PeriodoAcademicoId);
+        /// <summary>
+        /// identificador de Periodo Academico
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int PeriodoAcademicoId
+        {
+            get { return GetProperty(PeriodoAcademicoIdProperty); }
+            internal set { SetProperty(PeriodoAcademicoIdProperty, value); }
+        }
+
+        // PeriodoAcademicoNombre
+        private static readonly PropertyInfo<string> PeriodoAcademicoNombreProperty = RegisterProperty<string>(o => o.PeriodoAcademicoNombre);
+        /// <summary>
+        /// Nombre de Periodo Academico
+        /// </summary>
+        public string PeriodoAcademicoNombre
+        {
+            get { return GetProperty(PeriodoAcademicoNombreProperty); }
+            internal set { SetProperty(PeriodoAcademicoNombreProperty, value); }
+        }
+
+        // CentroEstudioId
+        private static readonly PropertyInfo<int> CentroEstudioIdProperty = RegisterProperty<int>(o => o.CentroEstudioId);
+        /// <summary>
+        /// Centro de Estudio en el cuál cursará la Matrícula el Estudiante
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int CentroEstudioId
+        {
+            get { return GetProperty(CentroEstudioIdProperty); }
+            set { SetProperty(CentroEstudioIdProperty, value); }
+        }
+
+        // EstructuraCurricularVariacionId
+        private static readonly PropertyInfo<int> EstructuraCurricularVariacionIdProperty =
+            RegisterProperty<int>(o => o.EstructuraCurricularVariacionId);
+        /// <summary>
+        /// Identificador de la Versión de la estructura curricular
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int EstructuraCurricularVariacionId
+        {
+            get { return GetProperty(EstructuraCurricularVariacionIdProperty); }
+            internal set { SetProperty(EstructuraCurricularVariacionIdProperty, value); }
+        }
+
+        // FechaAceptacion
+        private static readonly PropertyInfo<DateTime> FechaCreacionProperty =
+            RegisterProperty<DateTime>(o => o.FechaCreacion);
+        /// <summary>
+        /// Concebido como la Fecha de Aceptación de la Matrícula
+        /// </summary>
+        public DateTime FechaCreacion
+        {
+            get { return GetProperty(FechaCreacionProperty); }
+            set { SetProperty(FechaCreacionProperty, value); }
+        }
+
+        // FechaEstado
+        private static PropertyInfo<DateTime> FechaEstadoProperty = RegisterProperty<DateTime>(o => o.FechaEstado, "Fecha de Estado");
+        /// <summary>
+        /// Fecha en que se cambia el Estado de la solicitud_matricula
+        /// </summary>
+        public DateTime FechaEstado
+        {
+            get { return GetProperty(FechaEstadoProperty); }
+            set { SetProperty(FechaEstadoProperty, value); }
+        }
+
+        // mat_estado
+        private static PropertyInfo<int> EstadoIdProperty = RegisterProperty<int>(o => o.EstadoId, Textos.Estado);
+        /// <summary>
+        /// Identificador del estado de la matricula
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int EstadoId
+        {
+            get { return GetProperty(EstadoIdProperty); }
+            internal set { SetProperty(EstadoIdProperty, value); }
+        }
+
+        // Origen de matrícula
+        private static PropertyInfo<int> OrigenIdProperty = RegisterProperty<int>(o => o.OrigenId, Textos.OrigenMatricula);
+        /// <summary>
+        /// Identificador del origen de la matricula
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int OrigenId
+        {
+            get { return GetProperty(OrigenIdProperty); }
+            set { SetProperty(OrigenIdProperty, value); }
+        }
+
+        // Contrato de Matrícula
+        private static PropertyInfo<int?> ContratoIdProperty = RegisterProperty<int?>(o => o.ContratoId, Textos.ContratoMatricula);
+        /// <summary>
+        /// Identificador del contrato de la matricula
+        /// </summary>
+        public int? ContratoId
+        {
+            get { return GetProperty(ContratoIdProperty); }
+            set { SetProperty(ContratoIdProperty, value); }
+        }
+
+        // Identificador de cohorte
+        private static PropertyInfo<int?> CohorteIdProperty = RegisterProperty<int?>(o => o.CohorteId, Textos.Cohorte);
+        /// <summary>
+        /// Identificador de cohorte
+        /// </summary>
+        public int? CohorteId
+        {
+            get { return GetProperty(CohorteIdProperty); }
+            set { SetProperty(CohorteIdProperty, value); }
+        }
+
+        // Concurrencia
+        private static PropertyInfo<bool> ConcurrenciaProperty = RegisterProperty<bool>(o => o.Concurrencia);
+        /// <summary>
+        /// Debería cambiar de estado cuando uno de sus hijos cambia para control de concurrencia
+        /// </summary>
+        internal bool Concurrencia
+        {
+            get { return GetProperty(ConcurrenciaProperty); }
+            private set { SetProperty(ConcurrenciaProperty, value); }
+        }
+
+
+        //VersionRegistro
+        private static PropertyInfo<int> VersionRegistroProperty = RegisterProperty<int>(o => o.VersionRegistro);
+        /// <summary>
+        /// Descripcion
+        /// </summary>
+        public int VersionRegistro
+        {
+            get { return GetProperty(VersionRegistroProperty); }
+            set { SetProperty(VersionRegistroProperty, value); }
+        }
+
+        //TipoValidacion
+        private static PropertyInfo<string> TipoValidacionProperty = RegisterProperty<string>(o => o.TipoValidacion);
+        /// <summary>
+        /// Tipo de Validacion
+        /// </summary>
+        public string TipoValidacion
+        {
+            get { return GetProperty(TipoValidacionProperty); }
+            set { SetProperty(TipoValidacionProperty, value); }
+        }
+
+        // RegistradoPor
+        private static readonly PropertyInfo<string> RegistradoPorProperty = RegisterProperty<string>(o => o.RegistradoPor);
+        /// <summary>
+        /// Nombre de la persona que realiza la solicitud matricula
+        /// </summary>
+        [Requerido]
+        public string RegistradoPor
+        {
+            get { return GetProperty(RegistradoPorProperty); }
+            internal set { SetProperty(RegistradoPorProperty, value); }
+        }
+
+        #region Canal
+
+        private string _canal;
+        /// <summary>
+        /// Canal por el que fue ejecutada la matricula
+        /// </summary>
+        public string Canal
+        {
+            get { return _canal; }
+            internal set { _canal = value; }
+        }
+
+
+
+        /// <summary>
+        /// Canal por el que fue ejecutada la matricula
+        /// </summary>
+        public int CanalId
+        {
+            get;
+            internal set;
+        }
+
+
+
+
+        // Canal de Modificacion
+        private static PropertyInfo<int> CanalModificacionIdProperty = RegisterProperty<int>(o => o.CanalModificacionId);
+        /// <summary>
+        /// Identificador del canal modificacion
+        /// </summary>
+        public int CanalModificacionId
+        {
+            get { return GetProperty(CanalModificacionIdProperty); }
+            set { SetProperty(CanalModificacionIdProperty, value); }
+        }
+
+
+
+        // Ente de Modificacion
+        private static PropertyInfo<int> EnteModificacionIdProperty = RegisterProperty<int>(o => o.EnteModificacionId);
+        /// <summary>
+        /// Identificador del ente modificacion
+        /// </sumary>
+        public int EnteModificacionId
+        {
+            get { return GetProperty(EnteModificacionIdProperty); }
+            set { SetProperty(EnteModificacionIdProperty, value); }
+        }
+
+
+
+        // Nombre de ente que autoriza el desestimiento
+        private static PropertyInfo<string> AutorizadoPorProperty = RegisterProperty<string>(o => o.AutorizadoPor);
+        /// <summary>
+        /// AutorizadoPor
+        /// </summary>
+        // [Requerido]
+        public string AutorizadoPor
+        {
+            get { return GetProperty(AutorizadoPorProperty); }
+            set { SetProperty(AutorizadoPorProperty, value); }
+        }
+
+
+
+        // Referencia del desestimiento
+        private static PropertyInfo<string> ReferenciaProperty = RegisterProperty<string>(o => o.Referencia);
+        /// <summary>
+        /// Referencia
+        /// </summary>
+        public string Referencia
+        {
+            get { return GetProperty(ReferenciaProperty); }
+            set { SetProperty(ReferenciaProperty, value); }
+        }
+
+
+
+
+        #endregion
+
+        /// <summary>
+        /// Tipo de Cambio Que se Aplica
+        /// </summary>
+        public EnumVerificarCambioTipoMatricula TipoCambio = EnumVerificarCambioTipoMatricula.Ninguno;
+
+        #endregion
+
+
+        #region < LISTAS >
+
+        // Solicitudes
+        private static readonly PropertyInfo<SolicitudMatriculaDetalles> DetallesProperty =
+            RegisterProperty<SolicitudMatriculaDetalles>(o => o.Detalles);
+
+        /// <summary>
+        ///  Descripcion
+        /// </summary>
+        [ListaNoVacia]
+        public SolicitudMatriculaDetalles Detalles
+        {
+            get
+            {
+                if (!(FieldManager.FieldExists(DetallesProperty)))
+                    LoadProperty(DetallesProperty,
+                                 IsNew
+                                     ? SolicitudMatriculaDetalles.NewMatriculaDetalles()
+                                     : SolicitudMatriculaDetalles.GetMatriculaDetalles(Id));
+                return GetProperty(DetallesProperty);
+            }
+        }
+
+
+        /// <summary>
+        /// Devuelve un listado de componentes educativos de acuerdo al estado de la solicitud
+        /// </summary>
+        public List<SolicitudMatriculaDetalle> DetallesPorContexto(DetallesPorContextoSolicitudMatricula contexto)
+        {
+            int estadoCanceladoComponenteEducativoSolicitudMatricula;
+            int estadoAnuladoComponenteEducativoMatriculaAcademica;
+            switch (contexto)
+            {
+                case DetallesPorContextoSolicitudMatricula.Todos:
+                    return this.Detalles.ToList();
+
+                case DetallesPorContextoSolicitudMatricula.Validos:
+                    estadoCanceladoComponenteEducativoSolicitudMatricula = ComponenteEducativoMatriculaEstadoLookup.GetNameValueList().ObtenerItemId(CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_CANCELADO);
+                    estadoAnuladoComponenteEducativoMatriculaAcademica = ComponenteEducativoMatriculaAcademicaEstadoLookup.GetNameValueList().ObtenerItemId(CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_ACAD_ANULADO);
+                    return Detalles.Where(whr => whr.EstadoMatriculaAcademicaDetalleId != estadoAnuladoComponenteEducativoMatriculaAcademica).Where(whr => whr.EstadoId != estadoCanceladoComponenteEducativoSolicitudMatricula).ToList();
+
+                case DetallesPorContextoSolicitudMatricula.Invalidos:
+                    estadoCanceladoComponenteEducativoSolicitudMatricula = ComponenteEducativoMatriculaEstadoLookup.GetNameValueList().ObtenerItemId(CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_CANCELADO);
+                    estadoAnuladoComponenteEducativoMatriculaAcademica = ComponenteEducativoMatriculaAcademicaEstadoLookup.GetNameValueList().ObtenerItemId(CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_ACAD_ANULADO);
+                    return Detalles.Where(whr => whr.EstadoMatriculaAcademicaDetalleId == estadoAnuladoComponenteEducativoMatriculaAcademica).Where(whr => whr.EstadoId == estadoCanceladoComponenteEducativoSolicitudMatricula).ToList();
+
+                case DetallesPorContextoSolicitudMatricula.PorEstado:
+
+                    if (EstadoId == EstadosSolicitudMatricula().ObtenerItemId(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA))
+                    {
+                        return DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Todos);
+                    }
+                    return DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos);
+
+                case DetallesPorContextoSolicitudMatricula.Aceptadas:
+                    var estadoAceptadaComponenteEducativoSolicitudMatricula =
+                        ComponenteEducativoMatriculaEstadoLookup.GetNameValueList().ObtenerItemId(
+                            CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_ACEPTADO);
+                    return this.Detalles.Where(whr => whr.EstadoId == estadoAceptadaComponenteEducativoSolicitudMatricula).ToList();
+
+            }
+            //Lanzar una excepcion si no se implementa el contexto.
+            throw new Exception(string.Format("Contexto no implementado: {0}", contexto));
+        }
+
+
+
+        // Listado de Requsitos
+        private static PropertyInfo<SolicitudMatriculaRequisitos> RequisitosProperty = RegisterProperty<SolicitudMatriculaRequisitos>(o => o.Requisitos);
+        /// <summary>
+        /// Lista de los Elementos de Asignacion para la beca
+        /// </summary>
+        public SolicitudMatriculaRequisitos Requisitos
+        {
+            get
+            {
+                if (!(FieldManager.FieldExists(RequisitosProperty)))
+                    if (IsNew)
+                        LoadProperty(RequisitosProperty,
+                                     SolicitudMatriculaRequisitos.New());
+                    else
+                        LoadProperty(RequisitosProperty,
+                                     SolicitudMatriculaRequisitos.Get(Id));
+                return GetProperty(RequisitosProperty);
+            }
+        }
+        #endregion
+
+        #region <EXTRAS>
+
+        /// <summary>
+        /// Días de un año
+        /// </summary>
+        const int DiasAnio = 365;
+
+        /// <summary>
+        /// Devuelve un listado de los requsitos como resumen de esta solicitud
+        /// </summary>
+        /// <returns></returns>
+        public List<SolicitudMatriculaRequisitosResumen> GetResumenRequisitos(string usuario)
+        {
+            var listaRequisitos = new List<SolicitudMatriculaRequisitosResumen>();
+            var requisitos = new List<RequisitoCompletoInfo>();
+
+            var esEstudianteNuevo = EsPersonaSinRegistroAcademicoYSinMatriculasVigentesCmd.Execute(EstudianteId);
+
+            //var existeSolMatAnterior = ExisteSolicitudMatriculaProgramaCmd.Execute(ProgramaAcademicoId, EstudianteId,
+            //PeriodoAcademicoId);
+            //if (!existeSolMatAnterior)
+            //{
+            var parametros = new ActividadMatriculaRequisitosParams();
+            parametros.VariaciónId = EstructuraCurricularVariacionId;
+            parametros.CentroId = CentroEstudioId;
+
+            if (esEstudianteNuevo)
+            {
+                parametros.ObtenerRequisitosPrincipales = true;
+            }
+            else
+            {
+                parametros.ObtenerRequisitosPrincipales = false;
+            }
+
+            var actividadRequisitos = new ActividadMatriculaRequisitos();
+            var requisitosPrincipalesYRecurrentesConfigurados = actividadRequisitos.Ejecutar(parametros);
+            var servicioMatriculaId =
+                ServiciosLookup.GetServiciosLookup().First(x => x.Codigo == ConstantesBL.SERVICIO_MATRICULA).Id;
+            var requisitosTodos = RequisitoCompletoList.GetRequisitoCompletoList().Where(x => x.ServicioId == servicioMatriculaId).ToList();
+
+            foreach (var requisitosId in requisitosPrincipalesYRecurrentesConfigurados.RequisitosPrincipalesIds)
+            {
+                foreach (var requisitosTodo in requisitosTodos)
+                {
+                    if (requisitosTodo.Id == requisitosId)
+                    {
+                        requisitos.Add(requisitosTodo);
+                    }
+                }
+            }
+
+            foreach (var requisitosId in requisitosPrincipalesYRecurrentesConfigurados.RequisitosRecurrentesIds)
+            {
+                foreach (var requisitosTodo in requisitosTodos)
+                {
+                    if (requisitosTodo.Id == requisitosId)
+                    {
+                        requisitos.Add(requisitosTodo);
+                    }
+                }
+            }
+
+            if (Requisitos.Count < 1)
+            {
+                SetRequisitos(usuario);
+            }
+
+            //TODO: JOR - Validar que requisitos se muestran en pantalla
+
+            foreach (var solicitudMatriculaRequisito in Requisitos)
+            {
+                var programaAcademicoRequisito =
+                    requisitos.Where(
+                        whr => whr.RequisitoServicioId == solicitudMatriculaRequisito.RequisitoServicioId).
+                        FirstOrDefault();
+
+                if (programaAcademicoRequisito != null)
+                    listaRequisitos.Add(new SolicitudMatriculaRequisitosResumen
+                    {
+                        RequisitoServicioId = solicitudMatriculaRequisito.RequisitoServicioId,
+                        FechaRegistro = solicitudMatriculaRequisito.FechaRegistro,
+                        Id = solicitudMatriculaRequisito.Id,
+                        Nombre = solicitudMatriculaRequisito.Nombre,
+                        Codigo = solicitudMatriculaRequisito.Codigo,
+                        //Obligatorio = solicitudMatriculaRequisito.Obligatorio,
+                        RegistradoPor = solicitudMatriculaRequisito.RegistradoPor,
+                        TipoEntregaId = programaAcademicoRequisito != null ? programaAcademicoRequisito.TipoEntregaId : 0,
+                        Presentado = solicitudMatriculaRequisito.Entregado,
+                        //  MinimoRequerido = solicitudMatriculaRequisito.MinimoRequerido,
+                        Requerido = programaAcademicoRequisito.MinimoRequerido,
+                        Observacion = solicitudMatriculaRequisito.Observacion,
+                        EsValidacionAutomatica = solicitudMatriculaRequisito.EsValidacionAutomatica,
+                        EsValidacionManual = solicitudMatriculaRequisito.EsValidacionManual
+                    });
+            }
+            //}
+            /*else
+            {
+                var criteria = RequisitoMatriculaCriteria.New();
+                criteria.EnteId = EstudianteId;
+                criteria.PeriodoId = PeriodoAcademicoId;
+                criteria.ProgramaId = ProgramaAcademicoId;
+                requisitos = RequisitoCompletoList.GetRequisitoMatriculaList(criteria).ToList();
+
+                foreach (var solicitudMatriculaRequisito in requisitos)
+                {
+                    var programaAcademicoRequisito =
+                        requisitos.Where(
+                            whr => whr.RequisitoServicioId == solicitudMatriculaRequisito.RequisitoServicioId).
+                            FirstOrDefault();
+
+                    if (programaAcademicoRequisito != null)
+                        listaRequisitos.Add(new SolicitudMatriculaRequisitosResumen
+                        {
+                            RequisitoServicioId = solicitudMatriculaRequisito.RequisitoServicioId,
+                            Id = solicitudMatriculaRequisito.Id,
+                            Nombre = solicitudMatriculaRequisito.Nombre,
+                            Codigo = solicitudMatriculaRequisito.Codigo,
+                            Obligatorio = solicitudMatriculaRequisito.Obligatorio,
+                            TipoEntregaId = programaAcademicoRequisito != null ? programaAcademicoRequisito.TipoEntregaId : 0,
+                            Requerido = programaAcademicoRequisito.MinimoRequerido
+                        });
+                }
+            }*/
+
+
+            return listaRequisitos;
+        }
+
+        /// <summary>
+        /// Clase privada de componentes con impedimento
+        /// </summary>
+        private List<int> _componentesConImpedimentos = new List<int>();
+
+        /// <summary>
+        /// Listado de identificador de Componentes Educativos con Impedimentos
+        /// </summary>
+        public List<int> ComponentesConImpedimentos
+        {
+            get
+            {
+                GetImpedimentosNoAutorizados();
+                return _componentesConImpedimentos;
+            }
+        }
+
+        // Tipo de Matricula
+        private static readonly PropertyInfo<int> TipoMatriculaIdProperty = RegisterProperty<int>(o => o.TipoMatriculaId);
+        /// <summary>
+        /// Identificador Tipo de Matricula desde Item de Catalogo
+        /// </summary>
+        [Requerido]
+        [IdentificadorEnteroValido]
+        public int TipoMatriculaId
+        {
+            get { return GetProperty(TipoMatriculaIdProperty); }
+            internal set { SetProperty(TipoMatriculaIdProperty, value); }
+        }
+
+        /// <summary>
+        /// Indica el Identificador de Numero de Matricula de Item de Catalogo
+        /// </summary>
+        public int ItemIdNumeroMatricula
+        {
+            get
+            {
+                return GetDeterminarNumeroMatriculaItemIdCmd.Execute(ReadProperty(EstudianteIdProperty), ReadProperty(ProgramaAcademicoIdProperty), ReadProperty(PeriodoAcademicoIdProperty));
+            }
+        }
+        /// <summary>
+        /// Almacena la informacion de criteria de busqeuda anterior
+        /// </summary>
+        private PotencialComponentesOfertadosCriteria EtiquetaOfertaComponenteCriteria { get; set; }
+
+        // Etiqueta oferta Id
+        private static readonly PropertyInfo<int> EtiquetaOfertaIdProperty = RegisterProperty<int>(o => o.EtiquetaOfertaId);
+        /// <summary>
+        /// Identificador de Etiqueta oferta
+        /// </summary>
+        public int EtiquetaOfertaId
+        {
+            get
+            {
+                return GetProperty(EtiquetaOfertaIdProperty);
+            }
+            internal set
+            {
+                SetProperty(EtiquetaOfertaIdProperty, value);
+            }
+        }
+
+
+        // ValorTotal
+        private static PropertyInfo<decimal> ValorTotalProperty = RegisterProperty<decimal>(o => o.ValorTotal, Textos.ValorTotal);
+        /// <summary>
+        /// Valor Total a pagar por la solicitud => FINANCIERO
+        /// </summary>
+        public decimal ValorTotal
+        {
+            get { return GetProperty(ValorTotalProperty); }
+            set { SetProperty(ValorTotalProperty, value); }
+        }
+
+        // EventoMatricula
+        private static PropertyInfo<int> EventoMatriculaProperty = RegisterProperty<int>(o => o.EventoMatricula);
+        /// <summary>
+        /// Evento de matricula seleccionado en la solicitud
+        /// </summary>
+        public int EventoMatricula
+        {
+            get { return GetProperty(EventoMatriculaProperty); }
+            set { SetProperty(EventoMatriculaProperty, value); }
+        }
+
+        #endregion
+
+        #region <INFO>
+
+
+        /// <summary>
+        /// Etiqueta Oferta
+        /// </summary>
+        private static readonly PropertyInfo<PotencialComponentesOfertadosList> ComponentesOfertadosProperty = RegisterProperty<PotencialComponentesOfertadosList>(o => o.ComponentesOfertados);
+        /// <summary>
+        ///  Contiene la informacion de Etiqueta Oferta
+        /// </summary>
+        public PotencialComponentesOfertadosList ComponentesOfertados
+        {
+            get
+            {
+                if (EtiquetaOferta != null)
+                {
+                    if (!(FieldManager.FieldExists(ComponentesOfertadosProperty)) || ReadProperty(ComponentesOfertadosProperty) == null)
+                    {
+                        var criteria = PotencialComponentesOfertadosCriteria.New();
+                        criteria.EtiquetaOfertaId = ReadProperty(EtiquetaOfertaIdProperty);
+                        criteria.EstructuraCurricularVariacionId = ReadProperty(EstructuraCurricularVariacionIdProperty);
+                        criteria.PeriodoAcademicoId = ReadProperty(PeriodoAcademicoIdProperty);
+                        //criteria.ModalidadId = ProgramaAcademico.ModalidadId;
+                        LoadProperty(ComponentesOfertadosProperty, PotencialComponentesOfertadosList.Get(criteria));
+                        EtiquetaOfertaComponenteCriteria = criteria;
+                    }
+                    else
+                    {
+                        //Verificar si la criertia tiene informacion diferente
+                        var criteria = PotencialComponentesOfertadosCriteria.New();
+                        criteria.EtiquetaOfertaId = ReadProperty(EtiquetaOfertaIdProperty);
+                        criteria.EstructuraCurricularVariacionId = ReadProperty(EstructuraCurricularVariacionIdProperty);
+                        criteria.PeriodoAcademicoId = ReadProperty(PeriodoAcademicoIdProperty);
+                        //criteria.ModalidadId = ProgramaAcademico.ModalidadId;
+                        if (EtiquetaOfertaComponenteCriteria.EtiquetaOfertaId != criteria.EtiquetaOfertaId ||
+                            EtiquetaOfertaComponenteCriteria.EstructuraCurricularVariacionId != criteria.EstructuraCurricularVariacionId)
+                        {
+
+                            LoadProperty(ComponentesOfertadosProperty, PotencialComponentesOfertadosList.Get(criteria));
+                        }
+                        EtiquetaOfertaComponenteCriteria = criteria;
+                    }
+                }
+
+                return GetProperty(ComponentesOfertadosProperty);
+            }
+        }
+
+        /// <summary>
+        /// Etiqueta Oferta
+        /// </summary>
+        private static readonly PropertyInfo<EtiquetaOfertaSimpleInfo> EtiquetaOfertaProperty = RegisterProperty<EtiquetaOfertaSimpleInfo>(o => o.EtiquetaOferta);
+        /// <summary>
+        ///  Contiene la informacion de Etiqueta Oferta
+        /// </summary>
+        public EtiquetaOfertaSimpleInfo EtiquetaOferta
+        {
+            get
+            {
+                if (EtiquetaOfertaId > 0)
+                {
+                    if (FieldManager.FieldExists(EtiquetaOfertaIdProperty))
+                    {
+                        if (!(FieldManager.FieldExists(EtiquetaOfertaProperty)) || ReadProperty(EtiquetaOfertaProperty) == null)
+                        {
+                            LoadProperty(EtiquetaOfertaProperty, EtiquetaOfertaSimpleInfo.Get(ReadProperty(EtiquetaOfertaIdProperty)));
+                        }
+                        else
+                        {
+
+                            if (ReadProperty(EtiquetaOfertaIdProperty) != ReadProperty(EtiquetaOfertaProperty).Id)
+                            {
+                                LoadProperty(EtiquetaOfertaProperty, EtiquetaOfertaSimpleInfo.Get(ReadProperty(EtiquetaOfertaIdProperty)));
+                            }
+                        }
+                    }
+                }
+                return GetProperty(EtiquetaOfertaProperty);
+            }
+        }
+
+        /// <summary>
+        /// Variacion Estrcutura Curricular
+        /// </summary>
+        private static readonly PropertyInfo<EstructuraCurricularVariacionSimpleInfo> EstrcuturaCurricularVariacionProperty = RegisterProperty<EstructuraCurricularVariacionSimpleInfo>(o => o.EstrcuturaCurricularVariacion);
+        /// <summary>
+        ///  Contiene la informacion de Variacion Estrcutura Curricular
+        /// </summary>
+        public EstructuraCurricularVariacionSimpleInfo EstrcuturaCurricularVariacion
+        {
+            get
+            {
+                if (!(FieldManager.FieldExists(EstrcuturaCurricularVariacionProperty)) || ReadProperty(EstrcuturaCurricularVariacionProperty) == null)
+                {
+                    LoadProperty(EstrcuturaCurricularVariacionProperty, EstructuraCurricularVariacionSimpleInfo.Get(ReadProperty(EstructuraCurricularVariacionIdProperty)));
+                }
+                else
+                {
+                    if (ReadProperty(EstructuraCurricularVariacionIdProperty) != ReadProperty(EstrcuturaCurricularVariacionProperty).Id)
+                    {
+                        LoadProperty(EstrcuturaCurricularVariacionProperty, EstructuraCurricularVariacionSimpleInfo.Get(ReadProperty(EstructuraCurricularVariacionIdProperty)));
+                    }
+                }
+                return GetProperty(EstrcuturaCurricularVariacionProperty);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Sistema de Estudio
+        /// </summary>
+        private static readonly PropertyInfo<SistemaEstudioSimpleInfo> SistemaEstudioProperty = RegisterProperty<SistemaEstudioSimpleInfo>(o => o.SistemaEstudio);
+        /// <summary>
+        ///  Contiene la informacion de Sistema de Estudio
+        /// </summary>
+        public SistemaEstudioSimpleInfo SistemaEstudio
+        {
+            get
+            {
+                if (ProgramaAcademico != null)
+                {
+                    if (!(FieldManager.FieldExists(SistemaEstudioProperty)) || ReadProperty(SistemaEstudioProperty) == null)
+                    {
+                        LoadProperty(SistemaEstudioProperty, SistemaEstudioSimpleInfo.GetSistemaEstudioSimpleInfo(ReadProperty(ProgramaAcademicoProperty).SistemaEstudioId));
+                    }
+                    else
+                    {
+                        if (ReadProperty(ProgramaAcademicoProperty).SistemaEstudioId != ReadProperty(SistemaEstudioProperty).Id)
+                        {
+                            LoadProperty(SistemaEstudioProperty, SistemaEstudioSimpleInfo.GetSistemaEstudioSimpleInfo(ReadProperty(ProgramaAcademicoProperty).SistemaEstudioId));
+                        }
+                    }
+                }
+                return GetProperty(SistemaEstudioProperty);
+            }
+        }
+
+
+        /// <summary>
+        /// Programa Academico
+        /// </summary>
+        private static readonly PropertyInfo<ProgramaAcademicoInfo> ProgramaAcademicoProperty = RegisterProperty<ProgramaAcademicoInfo>(o => o.ProgramaAcademico);
+        /// <summary>
+        ///  Contiene la informacion de Programa Academico
+        /// </summary>
+        public ProgramaAcademicoInfo ProgramaAcademico
+        {
+            get
+            {
+                if (!(FieldManager.FieldExists(ProgramaAcademicoProperty)) || ReadProperty(ProgramaAcademicoProperty) == null)
+                {
+                    LoadProperty(ProgramaAcademicoProperty, ProgramaAcademicoInfo.GetProgramaAcademicoInfo(ReadProperty(ProgramaAcademicoIdProperty)));
+                }
+                else
+                {
+                    if (ReadProperty(ProgramaAcademicoIdProperty) != ReadProperty(ProgramaAcademicoProperty).Id)
+                    {
+                        LoadProperty(ProgramaAcademicoProperty, ProgramaAcademicoInfo.GetProgramaAcademicoInfo(ReadProperty(ProgramaAcademicoIdProperty)));
+                    }
+                }
+                return GetProperty(ProgramaAcademicoProperty);
+            }
+        }
+
+        /// <summary>
+        /// Expediente
+        /// </summary>
+        private static readonly PropertyInfo<List<ExpedienteDetalleInfo>> ExpedienteProperty = RegisterProperty<List<ExpedienteDetalleInfo>>(o => o.Expediente);
+        /// <summary>
+        ///  Informacion de Expediente
+        /// </summary>
+        public List<ExpedienteDetalleInfo> Expediente
+        {
+            get
+            {
+                if ((!FieldManager.FieldExists(ExpedienteProperty)) || ReadProperty(ExpedienteProperty) == null)
+                {
+                    var criteria = ExpedienteEstudianteCriteria.New();
+                    criteria.EnteId = ReadProperty(EstudianteIdProperty);
+                    criteria.ProgramaAcademicoId = ReadProperty(ProgramaAcademicoIdProperty);
+                    criteria.EstructuraCurricularVariacionId = EstrcuturaCurricularVariacion.Id;
+                    LoadProperty(ExpedienteProperty, ExpedienteDetalleList.GetDetalleFiltrado(criteria).ToList());
+                }
+                return GetProperty(ExpedienteProperty);
+            }
+        }
+
+
+        /// <summary>
+        /// Almacena un listado de autoriaciones de un estudiante
+        /// </summary>
+        private static readonly PropertyInfo<AutorizacionesEstudianteList> AutorizacionesProperty = RegisterProperty<AutorizacionesEstudianteList>(o => o.Autorizaciones);
+        /// <summary>
+        ///  Almacena un listado de autoriaciones de un estudiante
+        /// </summary>
+        public AutorizacionesEstudianteList Autorizaciones
+        {
+            get
+            {
+                if ((!FieldManager.FieldExists(AutorizacionesProperty)) || ReadProperty(AutorizacionesProperty) == null)
+                {
+                    var criteria = AutorizacionesEstudianteCriteria.New();
+                    criteria.EnteId = ReadProperty(EstudianteIdProperty);
+                    criteria.ProgramaAcademicoId = ReadProperty(ProgramaAcademicoIdProperty);
+                    criteria.PeriodoAcademicoId = ReadProperty(PeriodoAcademicoIdProperty);
+                    LoadProperty(AutorizacionesProperty, AutorizacionesEstudianteList.Get(criteria));
+                }
+                return GetProperty(AutorizacionesProperty);
+            }
+        }
+
+        /// <summary>
+        /// Almacena un listado de todas autoriaciones de un estudiante
+        /// </summary>
+        private static readonly PropertyInfo<AutorizacionesEstudianteList> AutorizacionesTodasProperty = RegisterProperty<AutorizacionesEstudianteList>(o => o.AutorizacionesTodas);
+        /// <summary>
+        ///  Almacena un listado de todas las autoriaciones de un estudiante
+        /// </summary>
+        public AutorizacionesEstudianteList AutorizacionesTodas
+        {
+            get
+            {
+                if ((!FieldManager.FieldExists(AutorizacionesTodasProperty)) || ReadProperty(AutorizacionesTodasProperty) == null)
+                {
+                    var criteria = AutorizacionesEstudianteCriteria.New();
+                    criteria.EnteId = ReadProperty(EstudianteIdProperty);
+                    criteria.PeriodoAcademicoId = ReadProperty(PeriodoAcademicoIdProperty);
+                    criteria.ProgramaAcademicoId = ReadProperty(ProgramaAcademicoIdProperty);
+                    criteria.IncluirTodosEstados = true;
+                    LoadProperty(AutorizacionesTodasProperty, AutorizacionesEstudianteList.Get(criteria));
+                }
+                return GetProperty(AutorizacionesTodasProperty);
+            }
+        }
+
+        /// <summary>
+        /// Almacena un listado de todas autoriaciones de un estudiante
+        /// </summary>
+        private static readonly PropertyInfo<ImpedimentosEstudianteList> ImpedimentosProperty = RegisterProperty<ImpedimentosEstudianteList>(o => o.Impedimentos);
+        /// <summary>
+        ///  Almacena un listado de todas las autoriaciones de un estudiante
+        /// </summary>
+        public ImpedimentosEstudianteList Impedimentos
+        {
+            get
+            {
+                if ((!FieldManager.FieldExists(ImpedimentosProperty)) || ReadProperty(ImpedimentosProperty) == null)
+                {
+                    var criteria = ImpedimentosEstudianteCriteria.New();
+                    criteria.EnteId = ReadProperty(EstudianteIdProperty);
+                    //SE COMENTA ESTA LINEA POR QUE SE DEBE RETORNAR TODOS LOS IMPEDIMENTOS
+                    //DE LOS DIFERENTES PERIODOS ACADEMICOS.
+                    //criteria.PeriodoAcademicoId = ReadProperty(PeriodoAcademicoIdProperty);
+                    criteria.ProgramaAcademicoId = ReadProperty(ProgramaAcademicoIdProperty);
+                    criteria.CodigoServicio = Constantes.SERVICIO_MATRICULA;
+                    LoadProperty(ImpedimentosProperty, ImpedimentosEstudianteList.Get(criteria));
+                }
+                return GetProperty(ImpedimentosProperty);
+            }
+        }
+
+
+        /// <summary>
+        /// Listado de Todas las solicitudes Anteriores
+        /// </summary>
+        [NonSerialized]
+        private static readonly PropertyInfo<List<SolicitudMatriculaInfo>> SolicitudesMatriculaAnterioresValidosProperty = RegisterProperty<List<SolicitudMatriculaInfo>>(o => o.SolicitudesMatriculaAnterioresValidos);
+        /// <summary>
+        ///  Contiene un listado de solicitudes anteriores, diferente a estado cancelado
+        /// </summary>
+        public List<SolicitudMatriculaInfo> SolicitudesMatriculaAnterioresValidos
+        {
+            get
+            {
+                if ((!FieldManager.FieldExists(SolicitudesMatriculaAnterioresValidosProperty)) || ReadProperty(SolicitudesMatriculaAnterioresValidosProperty) == null)
+                {
+
+                    var criteria = SolicitudesAnterioresCriteria.New();
+                    criteria.EnteId = ReadProperty(EstudianteIdProperty);
+                    criteria.PeriodoAcademicoId = ReadProperty(PeriodoAcademicoIdProperty);
+                    criteria.ProgramaAcademicoId = ReadProperty(ProgramaAcademicoIdProperty);
+                    criteria.SolicitudMatriculaActualId = ReadProperty(IdProperty);
+                    LoadProperty(SolicitudesMatriculaAnterioresValidosProperty, SolicitudMatriculaList.Get(criteria).ToList());
+                }
+                return GetProperty(SolicitudesMatriculaAnterioresValidosProperty);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region <CONTROL DE POTENCIAL ESTUDIANTIL>
+
+        /// <summary>
+        /// Este proceso ejecuta el potencial del estudiante y permite ofertar o no ofertar componentes para que un estudiante pueda cursar un componente
+        /// </summary>
+        /// <param name="permitirOfertar">Indica si esta permitido ofertar o no</param>
+        public PotencialMallaMatriculacion EjecutarPotencial(bool permitirOfertar)
+        {
+            ReiniciarImpedimentoAutorizacion(); //Realizo la inicializacion de impedimentos y autorizacion para actualizar la informacion en tipo real.
+            var potencial = new PotencialMallaMatriculacion(this, permitirOfertar);
+            //var puedetomarestudiante = potencial.Componentes.Where(whr => whr.PuedeTomarEstudiante).Count();
+            componentesDentroPotencial.AddRange(potencial.Componentes.Where(whr => whr.EstaEnOferta && whr.DentroPotencialEstudiante));
+
+            return potencial;
+        }
+
+        /// <summary>
+        /// Lista de Componentes dentro del Potencial del Estudiante que puede Cursar
+        /// </summary>
+        private List<PotencialMallaMatriculacionComponente> componentesDentroPotencial = new List<PotencialMallaMatriculacionComponente>();
+
+        /// <summary>
+        /// Lista de Componentes dentro del Potencial del Estudiante que puede Cursar
+        /// </summary>
+        public List<PotencialMallaMatriculacionComponente> ComponentesDentroPotencial
+        {
+            get
+            {
+                return componentesDentroPotencial;
+            }
+            internal set
+            {
+                componentesDentroPotencial = value;
+            }
+        }
+
+
+        #endregion
+
+        #region <METODOS>
+
+        #region <RESETEO DE CLASE POR SELECCION DE PERIODO ACADEMICO>
+
+        /// <summary>
+        /// Reiniciar con valores por defecto de solicitud de matricula
+        /// </summary>
+        public void Reiniciar()
+        {
+            ReinicarComponentes();
+            ReiniciarImpedimentoAutorizacion();
+            SetProperty(EstructuraCurricularVariacionIdProperty, null);
+            SetProperty(EstrcuturaCurricularVariacionProperty, null);
+            SetProperty(ProgramaAcademicoProperty, null);
+            SetProperty(ProgramaAcademicoIdProperty, null);
+            SetProperty(CentroEstudioIdProperty, null);
+            SetProperty(EtiquetaOfertaIdProperty, null);
+            SetProperty(EtiquetaOfertaProperty, null);
+            SetProperty(ComponentesOfertadosProperty, null);
+            SetProperty(TipoMatriculaIdProperty, null);
+            SetProperty(SistemaEstudioProperty, null);
+            SetProperty(ExpedienteProperty, null);
+            SetProperty(SolicitudesMatriculaAnterioresValidosProperty, null);
+            this.Requisitos.Clear();
+        }
+
+        /// <summary>
+        /// Reiniciar con valores por defecto de solicitud de matricula
+        /// </summary>
+        public void ReiniciarPorCentro()
+        {
+            ReinicarComponentes();
+            ReiniciarImpedimentoAutorizacion();
+            SetProperty(EstructuraCurricularVariacionIdProperty, null);
+            SetProperty(EstrcuturaCurricularVariacionProperty, null);
+            SetProperty(EtiquetaOfertaIdProperty, null);
+            SetProperty(EtiquetaOfertaProperty, null);
+            SetProperty(ComponentesOfertadosProperty, null);
+            SetProperty(TipoMatriculaIdProperty, null);
+            SetProperty(SistemaEstudioProperty, null);
+            SetProperty(ExpedienteProperty, null);
+            SetProperty(SolicitudesMatriculaAnterioresValidosProperty, null);
+        }
+
+        /// <summary>
+        /// Reiniciar con valores por defecto de solicitud de matricula
+        /// </summary>
+        public void ReiniciarPorEstructura()
+        {
+            ReinicarComponentes();
+            ReiniciarImpedimentoAutorizacion();
+            SetProperty(EstructuraCurricularVariacionIdProperty, null);
+            SetProperty(EstrcuturaCurricularVariacionProperty, null);
+            SetProperty(EtiquetaOfertaIdProperty, null);
+            SetProperty(EtiquetaOfertaProperty, null);
+            SetProperty(ComponentesOfertadosProperty, null);
+            SetProperty(TipoMatriculaIdProperty, null);
+            SetProperty(SistemaEstudioProperty, null);
+            SetProperty(ExpedienteProperty, null);
+            SetProperty(SolicitudesMatriculaAnterioresValidosProperty, null);
+        }
+
+        /// <summary>
+        /// Reiniciar Impedimentos y Autorizaciones
+        /// </summary>
+        public void ReiniciarImpedimentoAutorizacion()
+        {
+            SetProperty(ImpedimentosProperty, null);
+            SetProperty(AutorizacionesTodasProperty, null);
+            SetProperty(AutorizacionesProperty, null);
+        }
+
+        #endregion
+
+        #region <Control de EStados>
+
+        /// <summary>
+        /// Registra a la matrícula en estado En Proceso
+        /// </summary>
+        public void EnProceso()
+        {
+
+            //Si tiene el mismo estado
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ENPROCESO).Id) return;
+
+            //Si el estado es diferente
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_REGISTRADA).Id)
+            {
+                EstadoId = EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ENPROCESO).Id;
+            }
+            else
+            {
+                var estadoactual =
+                    EstadosSolicitudMatricula().Where(whr => whr.Id == EstadoId).Single();
+                throw new ArgumentException(string.Format("No es posibile aplicar el estado en Proceso, el estado actual es: {0}", estadoactual.Nombre));
+            }
+        }
+
+        /// <summary>
+        /// Registra a la matrícula en estado Aceptada
+        /// </summary>
+        public void Aceptada()
+        {
+
+            //Si tiene el mismo estado
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ACEPTADA).Id) return;
+
+            //Si el estado es diferente
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ENPROCESO).Id ||
+                EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_REGISTRADA).Id)
+            {
+                foreach (var detalle in DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos))
+                {
+                    detalle.Aceptado();
+                }
+                EstadoId = EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ACEPTADA).Id;
+            }
+            else
+            {
+                var estadoactual =
+                    EstadosSolicitudMatricula().Where(whr => whr.Id == EstadoId).Single();
+                throw new ArgumentException(string.Format("No es posibile aplicar el estado Pagada, el estado actual es: {0}", estadoactual.Nombre));
+            }
+        }
+
+        /// <summary>
+        /// Registra a la matrícula en estado Registrado
+        /// </summary>
+        public void Registrada()
+        {
+            //Si tiene el mismo estado
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_REGISTRADA).Id) return;
+
+            //Si el estado es diferente
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA).Id || IsNew || EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ENPROCESO).Id)
+            {
+                foreach (var detalle in DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos))
+                {
+                    detalle.Solicitado();
+                }
+                EstadoId = EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_REGISTRADA).Id;
+                FechaEstado = GetFechaSistemaCmd.Execute();
+
+            }
+            else
+            {
+                var estadoactual =
+                    EstadosSolicitudMatricula().Where(whr => whr.Id == EstadoId).Single();
+                throw new ArgumentException(string.Format("No es posibile aplicar el estado Registrado, el estado actual es: {0}", estadoactual.Nombre));
+            }
+        }
+
+
+        /// <summary>
+        /// Registra a la matricula en estado Solicitud
+        /// </summary>
+        public void Solicitud()
+        {
+
+            //Si tiene el mismo estado
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA).Id) return;
+            //Si el estado es diferente
+            if ((!FieldManager.FieldExists(EstadoIdProperty)) || (ReadProperty(EstadoIdProperty) == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA).Id) || this.IsNew)
+            {
+                foreach (var detalle in DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos))
+                {
+                    detalle.Solicitado();
+                }
+                EstadoId = EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA).Id;
+            }
+            else
+            {
+                var estadoactual =
+                    EstadosSolicitudMatricula().Where(whr => whr.Id == EstadoId).Single();
+                throw new ArgumentException(string.Format("No es posibile aplicar el estado Solicitada, el estado actual es: {0}", estadoactual.Nombre));
+            }
+        }
+
+        /// <summary>
+        /// Permite establecer valores para cancelar la matricula
+        /// </summary>
+        public void Cancelar()
+        {
+
+            //Si tiene el mismo estado
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA).Id) return;
+            //Si el estado es diferente
+            if (EstadoId != EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ENPROCESO).Id)
+            {
+                var totalRecord = Detalles.Count;
+                for (int i = totalRecord; i > 0; i--)
+                {
+                    ReadProperty(DetallesProperty).CancelarComponente(Detalles[i - 1]);
+                }
+                EstadoId = EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA).Id;
+                FechaEstado = GetFechaSistemaCmd.Execute();
+            }
+            else
+            {
+                var estadoactual =
+                   EstadosSolicitudMatricula().Where(whr => whr.Id == EstadoId).Single();
+                throw new ArgumentException(string.Format("No es posibile aplicar el estado Cancelada, el estado actual es: {0}", estadoactual.Nombre));
+            }
+        }
+
+
+
+
+
+        /// <summary>
+        /// Permite reiniciar Lista de Componentes
+        /// </summary>
+        public void ReinicarComponentes()
+        {
+            var totalRecord = Detalles.Count;
+            for (int i = totalRecord; i > 0; i--)
+            {
+                ReadProperty(DetallesProperty).CancelarComponente(Detalles[i - 1]);
+            }
+        }
+
+        public void CancelarComponentes(int[] ids)
+        {
+            foreach (var id in ids)
+            {
+                var componente = Detalles.SingleOrDefault(x => x.Id == id);
+                if (componente != null) componente.Cancelado();
+            }
+        }
+
+
+        /// <summary>
+        /// Permite establecer valores para cancelar la matricula
+        /// </summary>
+        public void CancelarDesistimientTotal(int[] ids)
+        {
+
+            //Si tiene el mismo estado
+            if (EstadoId == EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA).Id) return;
+            //Si el estado es diferente
+            if (EstadoId != EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_ENPROCESO).Id)
+            {
+                CancelarComponentes(ids);
+                EstadoId = EstadosSolicitudMatricula().ObtenerItem(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA).Id;
+                FechaEstado = GetFechaSistemaCmd.Execute();
+            }
+            else
+            {
+                var estadoactual =
+                   EstadosSolicitudMatricula().Where(whr => whr.Id == EstadoId).Single();
+                throw new ArgumentException(string.Format("No es posibile aplicar el estado Cancelada, el estado actual es: {0}", estadoactual.Nombre));
+            }
+        }
+
+
+
+
+        #endregion
+
+        #region <Validacion de Configuracion de Matricula>
+
+        /// <summary>
+        /// Permite establecer el tipo de validacion para esta Solicitud
+        /// </summary>
+        public void SetearTipoValidacion()
+        {
+            var consumoTipoValidacion = new ActividadMatriculaConsumoTipoValidacion();
+            var actividadParametro = new ActividadAceptarSolicitudMatriculaParamAct { SolicitudMatricula = this };
+            var tipoValidacion = consumoTipoValidacion.Ejecutar(actividadParametro);
+            TipoValidacion = tipoValidacion.TipoValidacion;
+        }
+
+        #endregion
+
+        #region <Validaciones de Planificacion/Calendarizacion>
+
+        /// <summary>
+        /// Permite Determinar si existen Autorizaciones Fuera de Periodo
+        /// </summary>
+        /// <returns></returns>
+        public bool GetExisteAutorizacionFueraPeriodo()
+        {
+            return this.GetAutorizacionesFueraPeriodo().Count > 0;
+        }
+
+        /// <summary>
+        /// Permite Auto Setear Informacion de Tipo Matricula y Convocatoria para Esta Solicitud
+        /// </summary>
+        /// <returns></returns>
+        public ResultadoValidacionFueraPeriodo SetTipoMatriculaConvocatoria(EnumVerificarCambioTipoMatricula cambio)
+        {
+            var tipoMatriculaId = 0;
+            var etiquetaOfertaId = 0;
+            var tieneAutorizacion = false;
+            var resultadoValidacion = new ResultadoValidacionFueraPeriodo();
+
+            //Primero Determinar si hay planificacion para servico matricual y solicitud de matrciulas
+            var determinaTipoMatricula = new ValidacionActividadSolicitudMatricula();
+            var resultadoPlanificacionSolicitudMatricula = determinaTipoMatricula.Ejecutar(new ValidacionActividadSolicitudMatriculaParams
+            {
+                SolicitudMatricula = this
+                //CanalAcceso = this.CanalId
+            });
+
+            //Setear automaticamente el tipo de matricula y la etiqueta oferta
+            if (resultadoPlanificacionSolicitudMatricula.Ok)
+            {
+                tipoMatriculaId = resultadoPlanificacionSolicitudMatricula.TipoMatriculaId;
+                etiquetaOfertaId = resultadoPlanificacionSolicitudMatricula.EtiquetaOfertaId;
+            }
+
+            #region <RMA034: AUTORIZACIONES FUERA DE PERIODO PARA SOLICITUD DE MATRÍCULA>
+
+            if (GetExisteAutorizacionFueraPeriodo())
+            {
+                //Determinar si hay una autorizacionson para el:
+                //Periodo Academico Seleccionado.
+                //Programa Academico Seleccionado.
+                var autorizacionesFueraPeriodo = GetAutorizacionesFueraPeriodo();
+                var autorizacionesValidosEstePeriodoyPrograma = autorizacionesFueraPeriodo.Where(whr => whr.PeriodoAcademicoId == ReadProperty(PeriodoAcademicoIdProperty) && whr.ProgramaAcademicoId == ReadProperty(ProgramaAcademicoIdProperty));
+
+                if (autorizacionesValidosEstePeriodoyPrograma.Count() > 0)
+                {
+                    var fechaActual = GetFechaSistemaCmd.Execute();
+                    foreach (var autorizacionInfo in autorizacionesValidosEstePeriodoyPrograma)
+                    {
+                        foreach (var autfueraperiodo in autorizacionInfo.AutorizacionesParaFueraPeriodo)
+                        {
+                            if (fechaActual.Date <= autfueraperiodo.FechaMaximaConsumo.Date)
+                            {
+                                tipoMatriculaId = autfueraperiodo.TipoMatriculaId;
+                                etiquetaOfertaId = autfueraperiodo.EtiquetaOfertaId;
+                                tieneAutorizacion = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                //Si realmente esta fuera de periodo, visualizar donde no mas tiene autorizaciones disponibles
+                if (!tieneAutorizacion)
+                {
+                    //Solo si no hay autorizaciones muestra una lista de periodo y programas acadmeicos don el estudiante tiene 
+                    //Autorizaciones Disponibles
+                    var autorizacionesValidosOtroPeriodoyPrograma =
+                       this.GetAutorizacionesFueraPeriodo().Where(
+                           whr =>
+                           whr.PeriodoAcademicoId == ReadProperty(PeriodoAcademicoIdProperty) &&
+                           whr.ProgramaAcademicoId != ReadProperty(ProgramaAcademicoIdProperty));
+
+                    foreach (var autorizacion in autorizacionesValidosOtroPeriodoyPrograma.Where(whr => whr.AutorizacionesParaFueraPeriodo.Count > 0))
+                    {
+                        resultadoValidacion.PeriodoyPrograma.Add(autorizacion.PeriodoAcademicoId, autorizacion.ProgramaAcademicoId);
+                    }
+
+                    //Si hay agregados periodos y programas acadmeicos diferentes, devuelve falso y muestra lista de autorizaciones fuera de periodo
+                    if (resultadoValidacion.PeriodoyPrograma.Count > 0)
+                    {
+                        resultadoValidacion.esValido = false;
+                        TipoCambio = cambio;
+                        return resultadoValidacion;
+                    }
+                }
+            }
+
+
+
+            #endregion
+
+            //Determinar si no tiene planificacion y no tienen autorizacion fuera de potencial
+            if (!resultadoPlanificacionSolicitudMatricula.Ok && !tieneAutorizacion)
+            {
+                resultadoValidacion.esValido = false;
+                resultadoValidacion.Mensaje = resultadoPlanificacionSolicitudMatricula.Motivo;
+                TipoCambio = cambio;
+                return resultadoValidacion;
+            }
+
+            switch (cambio)
+            {
+                case EnumVerificarCambioTipoMatricula.SolicitudMatriculaNueva:
+                case EnumVerificarCambioTipoMatricula.ActualizacionSolicitud:
+                case EnumVerificarCambioTipoMatricula.CambioEstadoValidacion:
+                case EnumVerificarCambioTipoMatricula.SolicitudMatriculaOnlineCreacion:
+                    resultadoValidacion.ChangeTipoMatriculaId = TipoMatriculaId != tipoMatriculaId;
+                    TipoMatriculaId = tipoMatriculaId;
+                    EtiquetaOfertaId = etiquetaOfertaId;
+                    break;
+                case EnumVerificarCambioTipoMatricula.ConsultaSistemaFinanciero:
+                case EnumVerificarCambioTipoMatricula.CambioEstadoPrefacturaTipoMatricula:
+                    resultadoValidacion.ChangeTipoMatriculaId = TipoMatriculaId != tipoMatriculaId;
+                    TipoMatriculaId = tipoMatriculaId;
+                    break;
+            }
+            TipoCambio = cambio;
+            return resultadoValidacion;
+        }
+
+        public void ChangeEtiquetaOfertaId(int etiquetaOfertaId)
+        {
+            EtiquetaOfertaId = etiquetaOfertaId;
+        }
+
+        #endregion
+
+        #region <Listas>
+
+        /// <summary>
+        /// Devuelve todos los Horarios de Todos los componentes Valido para la Solicitud
+        /// </summary>
+        /// <returns></returns>
+        public List<HorarioDetalleInfo> GetHorarios()
+        {
+            var horarios = new List<HorarioDetalleInfo>();
+            foreach (var componente in DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos))
+            {
+                horarios.AddRange(componente.GetHorarios());
+            }
+            return horarios;
+        }
+
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones de Fuera de Periodo
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionesEstudianteInfo> GetAutorizacionesImpedimentos()
+        {
+            var tipoAutorizacionParaImpedimento =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_PARA_IMPEDIMENTO)
+                   .Single().Id;
+
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionParaImpedimento).ToList();
+        }
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones de Fuera de Periodo
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionesEstudianteInfo> GetAutorizacionesFueraPeriodo()
+        {
+            var tipoAutorizacionIdFueraPeriodo =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_PARA_MATRICULA_FUERA_PERIODO)
+                   .Single().Id;
+
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdFueraPeriodo).ToList();
+        }
+
+
+        /// <summary>
+        /// Permite determinar si tiene cupo de admision estudiantil
+        /// </summary>
+        /// <returns></returns>
+        public bool TieneCupoAdmisionEstudiantil(int programaAcademicoId, int periodoAcademicoId)
+        {
+            var tipoAutorizacionIdAdmisionEstudiantil =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_PARA_ADMISION_ESTUDIANTIL)
+                   .Single().Id;
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdAdmisionEstudiantil && whr.PeriodoAcademicoId == periodoAcademicoId && whr.ProgramaAcademicoId == programaAcademicoId).Count() > 0;
+        }
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones de admision de un estudiante.
+        /// </summary>
+        /// <param name="enteId">Idnetificacion de Estudiante</param>
+        /// <param name="periodoAcademicoId">Identificacion de Periodo Academico</param>
+        /// <param name="programaAcademicoId">Identificacion de Programa Academico</param>
+        /// <returns></returns>
+        public static List<AutorizacionesEstudianteInfo> GetAutorizacionesAdmisionProgramaAcademico(int enteId, int periodoAcademicoId = 0, int programaAcademicoId = 0)
+        {
+            var criteria = AutorizacionesEstudianteCriteria.New();
+            criteria.EnteId = enteId;
+            criteria.ProgramaAcademicoId = programaAcademicoId;
+            criteria.PeriodoAcademicoId = periodoAcademicoId;
+            var autorizaciones = AutorizacionesEstudianteList.Get(criteria);
+            var tipoAutorizacionIdAdmisionEstudiantil =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_PARA_ADMISION_ESTUDIANTIL)
+                   .Single().Id;
+            return autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdAdmisionEstudiantil).ToList();
+        }
+
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones para Componentes Fuera de Potencial
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionesEstudianteInfo> GetAutorizacionesFueraPotencial()
+        {
+            var tipoAutorizacionIdFueraPotencial =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_PARA_COMPONENTESEDUCATIVOS_FUERA_POTENCIAL)
+                   .Single().Id;
+
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdFueraPotencial).ToList();
+        }
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones para Los Componentes Sin Cupo
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionesEstudianteInfo> GetAutorizacionesComponentesSinCupo()
+        {
+            var tipoAutorizacionIdFueraPotencial = TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_PARA_COMPONENTESEDUCATIVOS_SIN_CUPO).Single().Id;
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdFueraPotencial).ToList();
+        }
+
+
+        /// <summary>
+        /// Devuelve todas los componentes educativos con autorizaciones Fuera de Potencial
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionPotencialComponenteInfo> GetComponentesAutorizadosFueraPotencial()
+        {
+            var lista = new List<AutorizacionPotencialComponenteInfo>();
+            foreach (var autorizacionFueraPotencial in GetAutorizacionesFueraPotencial())
+            {
+                lista.AddRange(autorizacionFueraPotencial.AutorizacionFueraPotencial);
+            }
+            return lista;
+        }
+
+        /// <summary>
+        /// Devuelve el numero de componente o creditos autorizados
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionMatriculaMasCompCredInfo> GetNumeroComponentesCreditosAutorizados()
+        {
+            var lista = new List<AutorizacionMatriculaMasCompCredInfo>();
+            foreach (var autorizacionNumetoComponenteCredito in GetAutorizacionesNumeroComponentesCreditos())
+            {
+                lista.AddRange(autorizacionNumetoComponenteCredito.AutorizacionMatriculaMasCompCredDetalles);
+            }
+            return lista;
+        }
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones de numero de componentes o creditos
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionesEstudianteInfo> GetAutorizacionesNumeroComponentesCreditos()
+        {
+            var tipoAutorizacionIdNumeroComponentesCreditos =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.CODIGO_TIPO_AUTORIZACION_NUMERO_COMPONENTES_CREDITOS)
+                   .Single().Id;
+
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdNumeroComponentesCreditos).ToList();
+        }
+
+        /// <summary>
+        /// Devuelve todas las autorizaciones para Componentes Reprobados por segunda ocasión
+        /// </summary>
+        /// <returns></returns>
+        public List<AutorizacionesEstudianteInfo> GetAutorizacionesCoesReprobados()
+        {
+            var tipoAutorizacionIdCoesReprobados =
+               TipoAutorizacionList.Get().Where(whr => whr.Codigo == CodigosItems.ITEM_TIPO_AUTORIZACION_COMPONENTES_REPROBADOS_SEG)
+                   .Single().Id;
+
+            return Autorizaciones.Where(whr => whr.TipoAutorizacionId == tipoAutorizacionIdCoesReprobados).ToList();
+        }
+
+        #endregion
+
+
+        #endregion
+
+        #region <COMPROBACIONES>
+
+        #region <IMPEDIMENTOS>
+
+
+        /// <summary>
+        /// Permite Determinar si un estudiante Tiene Impedimentos
+        /// </summary>
+        /// <returns></returns>
+        public bool TieneImpedimentosNoAutorizados()
+        {
+            var impedimentosSinAutorizaciones = this.GetImpedimentosNoAutorizados();
+            return impedimentosSinAutorizaciones.Count > 0;
+        }
+
+        /// <summary>
+        /// Indica si puede tomar un componente por algun impedimento
+        /// </summary>
+        /// <returns></returns>
+        public bool PuedeTomarComponentePorImpedimento(int componenteEducativoId)
+        {
+            if (ComponentesConImpedimentos.Count > 0)
+            {
+                if (_componentesConImpedimentos.Where(whr => whr == componenteEducativoId).Count() > 0)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Permite verificar si tiene impedimentos sin autorizaciones el estudiante
+        /// </summary>
+        /// <returns>bool</returns>
+        public List<ImpedimentosEstudianteInfo> GetImpedimentosNoAutorizados()
+        {
+            var impedimentosNoAutorizados = new List<ImpedimentosEstudianteInfo>();
+            var impedimentosCreados = Impedimentos.ToList();
+            var listaAutorizacionImpedimento = new List<AutorizacionesImpedimentoInfo>();
+            //verificar si no tiene impedimentos
+            if (impedimentosCreados.Count() == 0)
+            {
+                return impedimentosNoAutorizados;
+            }
+
+            //Solo autorizacion para este estudiante o programa academico del estudiante
+
+            var autorizaciones =
+                this.GetAutorizacionesImpedimentos().Where(
+                    whr => whr.ProgramaAcademicoId == this.ProgramaAcademicoId || whr.ProgramaAcademicoId == 0).ToList();
+
+            //Si tiene impedimentos, verificar las autorizaciones.
+            foreach (var impedimento in impedimentosCreados)
+            {
+                foreach (var autorizacionImpedimento in autorizaciones)
+                {
+                    var existeAutorizacion = autorizacionImpedimento.AutorizacionesParaImpedimentos.Where(whr => whr.ImpedimentoId == impedimento.Id).FirstOrDefault();
+                    if (existeAutorizacion != null)
+                    {
+                        //SI HAY PROBLEMA DE AUTORIZACION DE IMPEDIMENTO
+                        listaAutorizacionImpedimento.Add(existeAutorizacion);
+                    }
+                }
+            }
+
+            //Verificar el tipo de impedmento y su autorizacion
+            foreach (var impedimento in impedimentosCreados)
+            {
+                var autorizacionesImpedimento = listaAutorizacionImpedimento.Where(whr => whr.ImpedimentoId == impedimento.Id);
+                if (autorizacionesImpedimento.Count() == 0)
+                {
+                    if (impedimento.TipoImpedimentoId == TipoImpedimentoList.Get().Where(x => x.Codigo == CodigosItems.ITEM_TIPO_IMPEDIMENTO_TERCERA_MATRICULA).FirstOrDefault().Id)
+                    {
+                        if (Autorizaciones.Where(x => x.CodigoTipoAutorizacion == CodigosItems.CODIGO_TIPO_AUTORIZACION_SEGUNDA_REPROBACION).FirstOrDefault() == null)
+                        {
+                            impedimentosNoAutorizados.Add(impedimento);
+                        }
+                    }
+                    else
+                    {
+                        impedimentosNoAutorizados.Add(impedimento);
+                    }
+                    //Si no tienen autorizacion
+
+                }
+                else
+                {
+                    //si tiene autorizaciones
+                    if (impedimento.TipoImpedimentoId ==
+                   TipoImpedimentoList.Get().Where(
+                       whr => whr.Codigo == CodigosItems.ITEM_TIPO_IMPEDIMENTO_TERCERA_MATRICULA).Single().Id ||
+                   impedimento.TipoImpedimentoId ==
+                   TipoImpedimentoList.Get().Where(
+                       whr => whr.Codigo == CodigosItems.ITEM_TIPO_IMPEDIMENTO_TERCERA_MATRICULA_ESPECIAL).Single()
+                       .Id)
+                    {
+
+                        foreach (var autorizacionesImpedimentoInfo in autorizacionesImpedimento.Where(whr => whr.ImpedimentoId == impedimento.Id))
+                        {
+                            var autorizacion = this.GetAutorizacionesImpedimentos().Where(whr => whr.Id == autorizacionesImpedimentoInfo.AutorizacionId).FirstOrDefault();
+                            if (autorizacion != null)
+                            {
+                                if (autorizacion.Restrictivo)
+                                    if (_componentesConImpedimentos.Where(whr => whr == impedimento.ComponenteEducativoId).Count() == 0)
+                                    {
+                                        _componentesConImpedimentos.Add(Convert.ToInt32(impedimento.ComponenteEducativoId));
+                                    }
+                            }
+                        }
+                    }
+                }
+
+            }
+            return impedimentosNoAutorizados;
+        }
+
+        #endregion
+
+        #region <VERIFICA SI TIENE AUTORIZACION SIN CUPO>
+
+        /// <summary>
+        /// Indica si el componente tiene autorizacion para fuera de potencial
+        /// </summary>
+        /// <param name="autorizaciones">Se debe incluir la lista de autorizaciones de fuera de potencial.</param>
+        /// <param name="componenteEducativoId">Identificador de Componente Educativo</param>
+        /// <returns></returns>
+        public bool TieneAutorizacionComponenteFueraPotencial(List<AutorizacionPotencialComponenteInfo> autorizaciones, int componenteEducativoId)
+        {
+            return autorizaciones.Where(whr => whr.ComponenteEducativoId == componenteEducativoId).Count() > 0;
+        }
+
+        /// <summary>
+        /// Indica si tiene o no autorizacion para matricularse en un componente sin cupo
+        /// </summary>
+        /// <param name="ofertaVariacionId">Identificador de Oferta Variacion</param>
+        /// <returns></returns>
+        public bool TieneAutorizacionComponenteSinCupo(int ofertaVariacionId)
+        {
+            foreach (var autorizacionFueraPotencial in GetAutorizacionesComponentesSinCupo())
+            {
+                foreach (var autoriza in autorizacionFueraPotencial.AutorizacionesSinCupo.Where(whr => whr.OfertaDetalleVariacionId == ofertaVariacionId))
+                {
+                    if (autoriza.SolicitudMatriculaDetalleId != null)
+                    {
+                        //Determinar si es el mismo detalle
+                        var detalleExistente = DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos).Where(whr => whr.Id == Convert.ToInt32(autoriza.SolicitudMatriculaDetalleId)).SingleOrDefault();
+                        if (detalleExistente != null)
+                        {
+                            return true;
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Devuelve informacion de Paralelos Disponibles de un Componente Educativo
+        /// </summary>
+        /// <param name="etiquetaOfertaComponente">Etiqueta Oferta Componente</param>
+        /// <param name="potencial">Potencial From JSON</param>
+        /// <returns></returns>
+        public List<ParaleloOfertadoDTO> GetParalelosDisponibles(EtiquetaOfertaComponenteInfo etiquetaOfertaComponente, PotencialMallaMatriculacionComponente potencial)
+        {
+            #region <PARALELOS DISPONIBLES>
+
+            var criteria = OfertaComponenteParaleloCriteria.New();
+            criteria.EtiquetaOfertaComponenteId = etiquetaOfertaComponente.Id;
+            criteria.EstructuraCurricularVariacionId = this.EstructuraCurricularVariacionId;
+            var paralelos = OfertaComponenteParaleloList.Get(criteria);
+            var paralelosDisponibles = new List<ParaleloOfertadoDTO>();
+            foreach (var paralelo in paralelos)
+            {
+                //Determinar solo los paralelos dentro de las oferta variaicones
+                //Determinar todas las variaciones para este paralelo
+                var criteriaVariaciones = ComponenteParaleloOfertaVariacionCriteria.New();
+                criteriaVariaciones.OfertaComponenteParaleloId = paralelo.Id;
+                criteriaVariaciones.EstructuraCurricularVariacionId = this.EstructuraCurricularVariacionId;
+                criteriaVariaciones.GrupoSistemaEstudioId = potencial.GrupoSistemaEstudioId;
+                var variaciones = ComponenteParaleloOfertaVariacionList.Get(criteriaVariaciones);
+                foreach (ComponenteParaleloOfertaVariacionInfo componenteParaleloOfertaVariacionInfo in variaciones.Where(whr => Convert.ToInt32(whr.NumeroCreditos) == potencial.NumeroCreditos))
+                {
+                    var paraleloDisponible = GetInformacionParalelo(paralelo, potencial);
+                    if (paraleloDisponible.CuposDisponibles > 0)
+                    {
+                        paralelosDisponibles.Add(paraleloDisponible);
+                    }
+                }
+            }
+            return paralelosDisponibles;
+
+            #endregion
+        }
+
+        /// <summary>
+        /// Devuelve informacion de ParaleloNombre
+        /// </summary>
+        /// <param name="paralelo">Oferta Componente ParaleloNombre</param>
+        /// <param name="potencial">Identificador de Grupo de Sistemas de Estudios</param>
+        /// <returns></returns>
+        public ParaleloOfertadoDTO GetInformacionParalelo(OfertaComponenteParaleloInfo paralelo, PotencialMallaMatriculacionComponente potencial)
+        {
+            var ofertaVariacion = SolicitudMatriculaDetalle.GetOfertaVariacion(paralelo.Id, this.EstructuraCurricularVariacionId, potencial.GrupoSistemaEstudioId, potencial.NumeroCreditos);
+            var cupoDisponiblesInformacionParalelo = CuposDisponiblesCmd.Execute(ofertaVariacion.Id);
+            var paraleloDisponible = new ParaleloOfertadoDTO
+            {
+                Id = paralelo.Id,
+                ParaleloNombre = paralelo.ParaleloNombre,
+                CuposDisponibles = cupoDisponiblesInformacionParalelo.CuposDisponibles,
+                CuposTotales = cupoDisponiblesInformacionParalelo.CuposTotales,
+                CuposConsumidos = cupoDisponiblesInformacionParalelo.CuposConsumidos,
+                ParaleloOrden = paralelo.ParaleloOrden,
+                ParaleloPrioridad = paralelo.ParaleloPrioridad,
+                ConfiguraCupos = true
+            };
+
+            //Determinar si el paralelo que esta tratando de indetificar la informacion de cupos, es cancelado en memoria para recuperar cupo por default
+            var solicitudDetalleCanceladoMemoria =
+                this.Detalles.Where(whr => whr.OfertaVariacionCanceladoId == ofertaVariacion.Id & whr.CanceladoEnMemoria).SingleOrDefault();
+
+            if (paraleloDisponible.CuposDisponibles <= 0)
+            {
+                if (this.TieneAutorizacionComponenteSinCupo(ofertaVariacion.Id))
+                {
+                    if (solicitudDetalleCanceladoMemoria == null)
+                    {
+                        paraleloDisponible.CuposTotales = paraleloDisponible.CuposTotales <= 0 ? 1 : paraleloDisponible.CuposTotales;
+                        paraleloDisponible.CuposDisponibles = paraleloDisponible.CuposDisponibles <= 0 ? 1 : paraleloDisponible.CuposDisponibles + 1;
+                        return paraleloDisponible;
+                    }
+                }
+
+                if (solicitudDetalleCanceladoMemoria != null)
+                {
+                    paraleloDisponible.CuposTotales = paraleloDisponible.CuposTotales <= 0 ? 1 : paraleloDisponible.CuposTotales;
+                    paraleloDisponible.CuposDisponibles = paraleloDisponible.CuposDisponibles <= 0 ? 1 : paraleloDisponible.CuposDisponibles + 1;
+                }
+            }
+
+            return paraleloDisponible;
+
+        }
+
+        #endregion
+
+        #endregion
+
+        #region < INICIALIZACION >
+        /// <summary>
+        /// sobrecarga del metodo Inicializar para agregar validaciones cuando una propiedad cambie
+        /// </summary>
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.ChildChanged += new EventHandler<Csla.Core.ChildChangedEventArgs>(Matricula_ChildChanged);
+            this.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Matricula_PropertyChanged);
+        }
+
+        /// <summary>
+        /// Sobrecarga del metodo OnDeserialized deserealiza las propiedades cuando viajes servidor-cliente
+        /// </summary>
+        /// <param name="context"></param>
+        protected override void OnDeserialized(System.Runtime.Serialization.StreamingContext context)
+        {
+            base.OnDeserialized(context);
+            this.ChildChanged += new EventHandler<Csla.Core.ChildChangedEventArgs>(Matricula_ChildChanged);
+            this.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(Matricula_PropertyChanged);
+
+        }
+
+        /// <summary>
+        /// Validación de reglas cuando existen cambios en las siguientes propiedades
+        /// </summary>
+        /// <param name="sender">Objeto</param>
+        /// <param name="e">Parametros</param>
+        void Matricula_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+            if (FieldManager.FieldExists(ProgramaAcademicoIdProperty)) ValidationRules.CheckRules(ProgramaAcademicoIdProperty);
+            if (FieldManager.FieldExists(EstudianteIdProperty)) ValidationRules.CheckRules(EstudianteIdProperty);
+            if (FieldManager.FieldExists(EstadoIdProperty)) ValidationRules.CheckRules(EstadoIdProperty);
+            if (FieldManager.FieldExists(CentroEstudioIdProperty)) ValidationRules.CheckRules(CentroEstudioIdProperty);
+            if (FieldManager.FieldExists(DetallesProperty)) ValidationRules.CheckRules(DetallesProperty);
+            if (FieldManager.FieldExists(TipoMatriculaIdProperty)) ValidationRules.CheckRules(TipoMatriculaIdProperty);
+            //Solo si existe cambio en el tipo de Matricula 
+
+        }
+        #endregion
+
+        #region < EVENTOS >
+        /// <summary>
+        /// Chekeo de validaciones cuando exista un cambio en las propiedades listas
+        /// </summary>
+        /// <param name="sender">object</param>
+        /// <param name="e">ChildChangedEventArgs</param>
+        void Matricula_ChildChanged(object sender, Csla.Core.ChildChangedEventArgs e)
+        {
+            Concurrencia = true;
+            if (FieldManager.FieldExists(DetallesProperty)) ValidationRules.CheckRules(DetallesProperty);
+            if (FieldManager.FieldExists(RequisitosProperty)) ValidationRules.CheckRules(RequisitosProperty);
+        }
+
+        //#region <CAMBIO DE TIPO DE MATRICULA>
+
+        ///// <summary>
+        /////   Delegado de Estrcutura de Consumo de Evento
+        ///// </summary>
+        ///// <param name = "sender"></param>
+        ///// <param name = "e"></param>
+        //public delegate void TipoMatriculaChangeHandler(object sender, TipoMatriculaChangeArgs e);
+
+        ///// <summary>
+        ///// Evento publico
+        ///// </summary>
+        //public event TipoMatriculaChangeHandler EventTipoMatriculaChangeHandler;
+
+        ///// <summary>
+        /////  Metodo para ejecutar los eventos.
+        ///// </summary>
+        ///// <param name = "sender">Objeto</param>
+        ///// <param name = "e">Argumentos</param>
+        //private void OnEventBeforeBuscarClickHandler(object sender, TipoMatriculaChangeArgs e)
+        //{
+        //    if (EventTipoMatriculaChangeHandler != null)
+        //        EventTipoMatriculaChangeHandler(sender, e);
+        //}
+
+        //#endregion
+
+
+        #endregion
+
+        #region <EXTRAS>
+
+        /// <summary>
+        /// Indica el Número de matrículas en un programa académico por modalidad
+        /// </summary>
+        public int NumeroMaximoProgramasModalidad { get; set; }
+
+        /// <summary>
+        /// Indica si presento todos los requisitos obligatorios
+        /// </summary>
+        /// <returns></returns>
+        public bool PresentoTodosLosObligatorios()
+        {
+            //return !(Requisitos.Where(whr => whr.Obligatorio && !whr.Entregado).Count() > 0);
+            return !(Requisitos.Where(whr => !whr.Entregado).Count() > 0);
+        }
+
+        /// <summary>
+        /// Permite determinar si existe una solicitud para el programa academico y estudiante
+        /// </summary>
+        /// <param name="programaAcademicoId">Identificador de Programa Academico</param>
+        /// <param name="estudianteId">Identificador de Ente</param>
+        /// <param name="periodoAcademicoId"></param>
+        /// <param name="estadoId"></param>
+        /// <returns></returns>
+        public static bool ExisteSolicitudMatriculaCarrera(int programaAcademicoId, int estudianteId, int periodoAcademicoId, int estadoId, int solicitudId)
+        {
+            //Permitir controlar de que no se repitan solicitudes para un mismo programa academico y estudiante
+            return ExisteSolicitudMatriculaCarreraCmd.Execute(programaAcademicoId, estudianteId, periodoAcademicoId, estadoId, solicitudId);
+        }
+
+
+        /// <summary>
+        /// Permite determinar si existe una solicitud para el programa academico y estudiante
+        /// </summary>
+        /// <param name="programaAcademicoId">Identificador de Programa Academico</param>
+        /// <param name="estudianteId">Identificador de Ente</param>
+        /// <param name="periodoAcademicoId"></param>
+        /// <param name="estadoId"></param>
+        /// <returns></returns>
+        public static bool ExisteMatriculaAsociadaSolicitud(int programaAcademicoId, int estudianteId, int periodoAcademicoId)
+        {
+            //Permitir controlar de que no se repitan solicitudes para un mismo programa academico y estudiante
+            return MatriculaAcademicaAsociadaSolicitudCmd.Execute(programaAcademicoId, estudianteId, periodoAcademicoId);
+        }
+
+
+        /// <summary>
+        /// Permite determinar si la inscripcion tiene asociada una solicitud de matricula con origen matricula
+        /// </summary>
+        /// <param name="programaAcademicoId">Identificador de Programa Academico</param>
+        /// <param name="estudianteId">Identificador de Ente</param>
+        /// <param name="periodoAcademicoId"></param>
+        /// <param name="estadoId"></param>
+        /// <returns></returns>
+        public static bool ExisteAsociadaSolicitudMat(int solicitudId)
+        {
+            return ExisteAsociadaSolicitudMatCmd.Execute(solicitudId);
+        }
+
+
+        #endregion
+
+        #region Validation Rules
+
+        protected override void AddBusinessRules()
+        {
+            base.AddBusinessRules();
+            ValidationRules.AddRule<SolicitudMatricula>(VerificarDuplicadoSolicitudPorProgramaAcademico, ProgramaAcademicoIdProperty);
+            ValidationRules.AddDependentProperty(ProgramaAcademicoIdProperty, EstudianteIdProperty);
+            ValidationRules.AddRule<SolicitudMatricula>(PuedeModificarse, EstadoIdProperty);
+            ValidationRules.AddRule<SolicitudMatricula>(VerificarComponentesValidos, DetallesProperty);
+            ValidationRules.AddRule<SolicitudMatricula>(ValidarTipoMatricula, TipoMatriculaIdProperty);
+        }
+
+        // A field that is not serialized.
+        [NonSerialized()]
+        private SolicitudMatriculaEstadoLookup _EstadosSolicitudMatricula;
+        /// <summary>
+        /// Estados de la solicitud de matricula, se lo coloca como propiedad, para se reutilizado en un proceso en el caso de llamarlo varias veces, para optimizar
+        /// </summary>
+        public SolicitudMatriculaEstadoLookup EstadosSolicitudMatricula()
+        {
+            if (_EstadosSolicitudMatricula == null)
+                _EstadosSolicitudMatricula = SolicitudMatriculaEstadoLookup.GetNameValueList();
+
+            return _EstadosSolicitudMatricula;
+        }
+
+        /// <summary>
+        /// Permite validar que por lo menos exista un componente valido
+        /// </summary>
+        /// <typeparam name="T">solicitud_matricula_detalle</typeparam>
+        /// <param name="target">Detalla de matricula</param>
+        /// <param name="e">parametros</param>
+        /// <returns></returns>
+        private static bool VerificarComponentesValidos<T>(T target, RuleArgs e) where T : SolicitudMatricula
+        {
+            if (target.FieldManager.FieldExists(DetallesProperty))
+            {
+                if (target.FieldManager.FieldExists(EstadoIdProperty))
+                {
+
+                    if (target.EstadoId != target.EstadosSolicitudMatricula().ObtenerItemId(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA))
+                    {
+
+                        if (target.FieldManager.FieldExists(DetallesProperty))
+                        {
+                            var estadoComponenteEducativoMatricula =
+                            target.ReadProperty(DetallesProperty).EstadosComponentesSolicitudHelper.getEstados;
+                            int estadoCancelado =
+                                estadoComponenteEducativoMatricula.Where(
+                                    whr => whr.Codigo == CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_CANCELADO).First().Id;
+                            if (target.ReadProperty(DetallesProperty).Where(whr => whr.EstadoId != estadoCancelado).Count() == 0)
+                            {
+                                e.Description = Mensajes.Nohaseleccionadocomponenteseducativos;
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// Permite Determinar el si esta habilitado el tipo de matricula
+        /// </summary>
+        /// <typeparam name="T">solicitud_matricula_detalle</typeparam>
+        /// <param name="target">Detalla de matricula</param>
+        /// <param name="e">parametros</param>
+        /// <returns></returns>
+        private static bool ValidarTipoMatricula<T>(T target, RuleArgs e) where T : SolicitudMatricula
+        {
+            if (target.ProgramaAcademicoId == 0 || target.EstudianteId == 0 || target.PeriodoAcademicoId == 0 || target.CentroEstudioId == 0) return true;
+            //Este proceso de validacion solo aplica a estado de solicitud solicitada y registrada
+            if (target.EstadoId == target.EstadosSolicitudMatricula().ObtenerItemId(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA) ||
+                target.EstadoId == target.EstadosSolicitudMatricula().ObtenerItemId(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_REGISTRADA))
+            {
+                if (target.TipoCambio != EnumVerificarCambioTipoMatricula.Ninguno)
+                {
+                    if (target.TipoCambio == EnumVerificarCambioTipoMatricula.ActualizacionSolicitud ||
+                        target.TipoCambio == EnumVerificarCambioTipoMatricula.CambioEstadoValidacion ||
+                        target.TipoCambio == EnumVerificarCambioTipoMatricula.SolicitudMatriculaNueva ||
+                        target.TipoCambio == EnumVerificarCambioTipoMatricula.ConsultaSistemaFinanciero ||
+                        target.TipoCambio == EnumVerificarCambioTipoMatricula.SolicitudMatriculaOnlineCreacion
+                        )
+                    {
+                        var resultado = target.SetTipoMatriculaConvocatoria(target.TipoCambio);
+                        if (!resultado.esValido || resultado.ChangeTipoMatriculaId)
+                        {
+                            e.Description = resultado.Mensaje;
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// Permite validar si esta paralelo del componente seleccionado tiene cupos o no
+        /// </summary>
+        /// <typeparam name="T">solicitud_matricula_detalle</typeparam>
+        /// <param name="target">Detalla de matricula</param>
+        /// <param name="e">parametros</param>
+        /// <returns></returns>
+        private static bool VerificarDuplicadoSolicitudPorProgramaAcademico<T>(T target, RuleArgs e) where T : SolicitudMatricula
+        {
+
+            if (target.ProgramaAcademicoId == 0 || target.EstudianteId == 0) return true;
+            //Solo aplica esta validacion, si el estado de la solcitud es diferente a cancelada
+            //Correccion por error producido en Ambiente de Produccion
+            if (target.EstadoId != target.EstadosSolicitudMatricula().ObtenerItemId(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA))
+            {
+                if (ExisteSolicitudMatriculaCarrera(target.ProgramaAcademicoId, target.EstudianteId, target.PeriodoAcademicoId, target.EstadoId, target.Id))
+                {
+                    e.Description = string.Format(Mensajes.ElEstudianteyatieneunasolicituddematricula___enelprogramaacadmeico__, target.ProgramaAcademico.Nombre);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
+        private static bool PuedeModificarse<T>(T target, RuleArgs e) where T : SolicitudMatricula
+        {
+            e.Description = Textos.SolicitudesSuceptiblesDeEdicion;
+            //Todo: verificar con que valor se va ha hacer esta validacion
+            /*
+            if(target.IsNew)
+            {
+                return true;
+            }
+            
+            int estado= target.GetProperty(EstadoIdProperty);
+
+             if (GetIdItemCmd.Execute(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_CANCELADA) == estado)
+            {
+                return false;
+            }
+
+            if (GetIdItemCmd.Execute(CodigosItems.ITEM_ESTADO_MATRICULA_NEGADA) == estado)
+            {
+                return false;
+            }*/
+
+            return true;
+        }
+
+        #endregion
+
+        #region Factory Methods
+
+        private SolicitudMatricula()
+        {
+            /* Require use of factory methods */
+        }
+
+        /// <summary>
+        /// Crea una nueva instancia de Solicitud de Matricula
+        /// </summary>
+        /// <returns></returns>
+        /// <param name="canal">Canal por el que se realiza la solicitud
+        /// Ej: SAEL Servicios en linea , NSGA sistema de gestion academica
+        /// </param>
+        public static SolicitudMatricula NewSolicitudMatricula(string canal)
+        {
+            var solicitudMatricula = DataPortal.Create<SolicitudMatricula>();
+            //Set el canal por el que se realiza la matricula
+            solicitudMatricula.Canal = canal;
+            solicitudMatricula.CanalId = CanalList.Get().GetCanalInfo(solicitudMatricula.Canal).Id;
+            solicitudMatricula.EstadoId = solicitudMatricula.EstadosSolicitudMatricula().ObtenerItemId(CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA);
+            solicitudMatricula.RegistradoPor = ServiceLocator.Current.GetInstance<ISyllabusApplication>().GetCurrentUser().Nombre;
+            return solicitudMatricula;
+        }
+
+        /// <summary>
+        /// Devuelve la solicitud de Matricula de Acuerdo al identificador
+        /// </summary>
+        /// <param name="matriculaId">Identificador de Solicitud de Matricula</param>
+        /// <returns></returns>
+        public static SolicitudMatricula GetSolicitudMatricula(int matriculaId)
+        {
+            return DataPortal.Fetch<SolicitudMatricula>(new SingleCriteria<SolicitudMatricula, int>(matriculaId));
+            //var nuevoObjeto = DataPortal.Fetch<SolicitudMatricula>(new SingleCriteria<SolicitudMatricula, int>(matriculaId));
+            //if (!nuevoObjeto.IsNew)
+            //{
+            //    nuevoObjeto.EstadoId = nuevoObjeto.EstadosLookup.Where(x => x.Codigo == CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA).Single().Id;
+            //    nuevoObjeto.Numero = nuevoObjeto.EstadosLookup.Where(x => x.Codigo == CodigosItems.ITEM_ESTADO_SOLICITUD_MATRICULA_SOLICITADA).Single().Id.ToString();
+            //}
+            //return nuevoObjeto;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Devuelve el numero de configuracion de cupos
+        /// </summary>
+        /// <param name="ofertaComponenteParaleloId">oferta componente paralelo</param>
+        /// <param name="matricula">matricula</param>
+        /// <param name="potencial">potencial</param>
+        /// <returns></returns>
+        public static bool GetNumeroConfiguracionHorarios(int ofertaComponenteParaleloId, SolicitudMatricula matricula, PotencialMallaMatriculacionComponente potencial)
+        {
+            var ofertaVariacion = SolicitudMatriculaDetalle.GetOfertaVariacion(ofertaComponenteParaleloId, matricula.EstructuraCurricularVariacionId, potencial.GrupoSistemaEstudioId, potencial.NumeroCreditos);
+            var horariosDetalles = HorarioDetalleList.Get(ofertaVariacion.Id);
+            return horariosDetalles.Count() > 0;
+        }
+
+        #region <Metodos Publicos>
+
+        /// <summary>
+        /// Permite establecer el periodo Acadmeico de la Solicitud de Matricula
+        /// </summary>
+        /// <param name="periodoAcademicoId">Identificador de Periodo Academico</param>
+        /// <returns></returns>
+        public ResultadoValidacion EstablecerPeriodoAcademico(int periodoAcademicoId)
+        {
+            var response = new ResultadoValidacion();
+            Reiniciar();
+            if (!FieldManager.FieldExists(NumeroProperty))
+            {
+                SetProperty(NumeroProperty, GetSecuenciaCmd.Execute(Constantes.SEC_TSGA_SOL_MATRICULA));
+            }
+            this.PeriodoAcademicoId = periodoAcademicoId;
+            this.PeriodoAcademicoNombre = PeriodoAcademicoInfo.Get(periodoAcademicoId).Nombre;
+            this.FechaCreacion = GetFechaSistemaCmd.Execute();
+            return response;
+        }
+
+        /// <summary>
+        /// Permite establecer el estudiante
+        /// </summary>
+        /// <param name="enteId">Identificacion del Ente</param>
+        /// <returns></returns>
+        public ResultadoValidacion EstablecerEstudiante(int enteId)
+        {
+            var response = new ResultadoValidacion();
+            this.Reiniciar();
+            this.EstudianteId = enteId;
+            return response;
+        }
+
+        /// <summary>
+        /// Permite establecer la Variaicon
+        /// </summary>
+        /// <param name="estrcuturaCurricularVariacionId">Identificacion de Estrcutura Curricular Variacion</param>
+        /// <returns></returns>
+        public ResultadoValidacion EstablecerVariacion(int estrcuturaCurricularVariacionId, string strNombreUsuarioLogueado)
+        {
+            var response = new ResultadoValidacion();
+            ReiniciarPorEstructura();
+            EstructuraCurricularVariacionId = estrcuturaCurricularVariacionId;
+            if (CentroEstudioId > 0)
+            {
+                SetRequisitos(strNombreUsuarioLogueado);
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// Con su respectiva validacion de programa academico
+        /// </summary>
+        /// <param name="programaAcademicoId">Identificador de Programa Academico</param>
+        /// <param name="strNombreUsuarioLogueado"> </param>
+        /// <returns></returns>
+        public ResultadoValidacionEstablecerProgramaAcademico EstablecerProgramaAcademico(int programaAcademicoId, string strNombreUsuarioLogueado)
+        {
+            var response = new ResultadoValidacionEstablecerProgramaAcademico();
+            this.Reiniciar();
+            this.ProgramaAcademicoId = programaAcademicoId;
+            this.EstablecerCentroUniversitarioPorDefecto(strNombreUsuarioLogueado);
+            response.VisualizaRequisitosSolicitud = false; //SetRequisitos(strNombreUsuarioLogueado);
+            return response;
+        }
+
+        /// <summary>
+        /// Con su respectiva validacion de programa academico
+        /// </summary>
+        /// <returns></returns>
+        public ResultadoValidacion ValidarProgramaAcademico()
+        {
+            var response = new ResultadoValidacionEstablecerProgramaAcademico();
+            var flujo = new FlujoRegistroSolicitudMatricula();
+            var respuesta = flujo.ValidarProgramaAcademico(this);
+            if (!respuesta.Ok)
+            {
+                response.esValido = false;
+                response.Mensaje = respuesta.Motivo;
+                return response;
+            }
+            return response;
+        }
+
+
+        /// <summary>
+        /// Establece los Requisitos e indica con true: si visualiza los requisitos o no visualiza requisitos
+        /// </summary>
+        /// <returns>bool, indica si visiauliza o no los requisitos</returns>
+        public bool SetRequisitos(string strNombreUsuarioLogueado)
+        {
+
+            log.DebugFormat("1. Iniciando llamada al metodo SetRequisitos, nombre usuario logueado = {0}", strNombreUsuarioLogueado);
+
+            #region <ESTABLECER LOS REQUISITOS EN LA SOLICITUD>
+            var visualizaRequisitos = true;
+
+
+            var esEstudianteNuevo = EsPersonaSinRegistroAcademicoYSinMatriculasVigentesCmd.Execute(EstudianteId);
+
+            //var existeSolMatAnterior = ExisteSolicitudMatriculaProgramaCmd.Execute(ProgramaAcademicoId, EstudianteId,
+            //PeriodoAcademicoId);
+
+            //log.DebugFormat("2. SetRequisitos, este estudiante = {0} tiene una solicitud matricula anteior = {1}", EstudianteId, existeSolMatAnterior);
+            //if (!existeSolMatAnterior)
+            //{
+
+            var parametros = new ActividadMatriculaRequisitosParams();
+            parametros.VariaciónId = EstructuraCurricularVariacionId;
+            parametros.CentroId = CentroEstudioId;
+
+            if (esEstudianteNuevo)
+            {
+                parametros.ObtenerRequisitosPrincipales = true;
+            }
+            else
+            {
+                parametros.ObtenerRequisitosPrincipales = false;
+            }
+
+            var actividadRequisitos = new ActividadMatriculaRequisitos();
+            var requisitosPrincipalesYRecurrentesConfigurados = actividadRequisitos.Ejecutar(parametros);
+
+            var servicioMatriculaId =
+                ServiciosLookup.GetServiciosLookup().First(x => x.Codigo == ConstantesBL.SERVICIO_MATRICULA).Id;
+            log.DebugFormat("3. SetRequisitos, obtenemos el id del servicio de matricula: {0}", servicioMatriculaId);
+
+            var requisitosTodos = RequisitoCompletoList.GetRequisitoCompletoList().Where(x => x.ServicioId == servicioMatriculaId).ToList();
+            log.DebugFormat("4. SetRequisitos, obtenemos todos los requisitos configurados para el servicio de matricula: {0}", string.Join(",", requisitosTodos.Select(x => x.Codigo)));
+
+            var requisitosPrincipalesEntregadosOtraTitulacion = RequisitoCompletoList.GetRequisitosEntregados(EstudianteId)
+                                                .Where(x => x.ProgramaAcademicoId != ProgramaAcademicoId);
+            log.DebugFormat("5 SetRequisitos, obtenemos todos los requisitos principales que haya entregado el estudiante: {0}, requisitos: {1}", EstudianteId, string.Join(",", requisitosPrincipalesEntregadosOtraTitulacion.Select(x => x.Codigo)));
+
+            var requisitos = new List<RequisitoCompletoInfo>();
+
+            foreach (var requisitosId in requisitosPrincipalesYRecurrentesConfigurados.RequisitosPrincipalesIds)
+            {
+                foreach (var requisitosTodo in requisitosTodos)
+                {
+                    log.DebugFormat("6. estos requisitos son iguales {0}={1}", requisitosTodo.Id, requisitosId);
+                    if (requisitosTodo.Id == requisitosId)
+                    {
+                        var requisitoEntregado = requisitosPrincipalesEntregadosOtraTitulacion.FirstOrDefault(x => x.Id == requisitosTodo.Id);
+                        if (requisitoEntregado == null)
+                        {
+                            log.DebugFormat("7. SetRequisitos, 1 añadimos un objeto a la lista de requisitos {0}", requisitosTodo.Codigo);
+                            requisitosTodo.TipoEntregaCodigo = Constantes.CODIGO_REQUISITO_PRINCIPAL;
+                            requisitos.Add(requisitosTodo);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            var tipoEntregaRecurrenteId = TipoEntregaCatalogoLookup.Get().ObtenerItemId(Constantes.CODIGO_REQUISITO_RECURRENTE);
+
+            foreach (var requisitosId in requisitosPrincipalesYRecurrentesConfigurados.RequisitosRecurrentesIds)
+            {
+                foreach (var requisitosTodo in requisitosTodos)
+                {
+                    log.DebugFormat("6. estos requisitos son iguales {0}={1}", requisitosTodo.Id, requisitosId);
+                    if (requisitosTodo.Id == requisitosId)
+                    {
+                        var requisitoEntregado = Requisitos.Where(x => x.TipoEntregaId == tipoEntregaRecurrenteId).FirstOrDefault(x => x.Id == requisitosTodo.Id);
+                        if (requisitoEntregado == null)
+                        {
+                            log.DebugFormat("7. SetRequisitos, 1 añadimos un objeto a la lista de requisitos {0}", requisitosTodo.Codigo);
+                            requisitosTodo.TipoEntregaCodigo = Constantes.CODIGO_REQUISITO_RECURRENTE;
+                            requisitos.Add(requisitosTodo);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            //Agregar todos los requisitos a la solicitud de matricula para luego tener como historial de la informacion
+            //que se visualiza y no
+            foreach (var requisito in requisitos.Distinct())
+            {
+                var requisitoAgregado =
+                    Requisitos.FirstOrDefault(x => x.RequisitoServicioId == requisito.RequisitoServicioId);
+
+                log.DebugFormat("8. SerRequisito, no se encontro el requisito en la lista de todos los requistos configurados: {0} ", requisito.Codigo);
+                if (requisitoAgregado == null)
+                {
+                    var tipoEntregaId = TipoEntregaCatalogoLookup.Get().ObtenerItemId(requisito.TipoEntregaCodigo);
+                    var requisitoMatricula = SolicitudMatriculaRequisito.New();
+                    requisitoMatricula.Codigo = requisito.Codigo;
+                    requisitoMatricula.Nombre = requisito.Nombre;
+                    //requisitoMatricula.Obligatorio = requisito.Obligatorio;
+                    //requisitoMatricula.ActividadId = Id;
+                    requisitoMatricula.RequisitoServicioId = requisito.RequisitoServicioId;
+                    requisitoMatricula.Requerido = requisito.MinimoRequerido;
+                    requisitoMatricula.Entregado = false;
+                    requisitoMatricula.RegistradoPor = strNombreUsuarioLogueado;
+                    requisitoMatricula.TipoEntregaId = tipoEntregaId;
+                    requisitoMatricula.ValidacionCodigo = requisito.ValidacionCodigo;
+                    requisitoMatricula.ValidacionNombre = requisito.ValidacionNombre;
+                    requisitoMatricula.ProcesoAplicaCodigo = requisito.ProcesoAplicaCodigo;
+                    requisitoMatricula.EstadoRequisito =
+                        EstadoRequisitoMatriculaLookup.Get().Where(
+                            x => x.Codigo == ConstantesBL.ESTADO_MATRICULA_PENDIENTE).First().Id;
+
+                    log.DebugFormat("9. SetRequisitos, añadimos un objeto a la lista de requisitos {0}", requisitoMatricula.Codigo);
+                    Requisitos.Add(requisitoMatricula);
+                }
+            }
+            //}
+
+
+            log.DebugFormat("SetRequisitos, salimos del metodo");
+            #endregion
+
+            return visualizaRequisitos;
+
+        }
+
+
+        /// <summary>
+        /// Realiza la validacion de Numero Maximo de Componentes Educativos y Numero de Creditos
+        /// </summary>
+        /// <returns></returns>
+        public ResultadoValidacion ValidaNumeroMaximoComponentesyCreditos()
+        {
+            var response = new ResultadoValidacion();
+            var actividadSolicitudMatriculaCreCompMax = new ActividadSolicitudMatriculaCreCompMax();
+            var respuesta = actividadSolicitudMatriculaCreCompMax.Ejecutar(new ActividadMuneroMaximoCreditosComponentesParams
+            {
+                SolicitudMatricula = this
+            });
+
+            if (!respuesta.Ok)
+            {
+                var autorizacionCreditosComponentes = GetNumeroComponentesCreditosAutorizados();
+
+                if (autorizacionCreditosComponentes.Count > 0)
+                {
+                    if (SistemaEstudio.FormaAprobacionCodigo == CodigosVariablesNegocio.FORMA_APROBACION_CREDITOS)
+                    {
+                        var sumaCreditos = DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos).Sum(x => x.UnidadesAprobacion);
+
+                        var creditosAnteriores =
+                            SolicitudesMatriculaAnterioresValidos.Where(
+                            whr => whr.ProgramaAcademicoId == ProgramaAcademicoId &&
+                            whr.PeriodoAcademicoId == PeriodoAcademicoId &&
+                            whr.VariacionId == EstructuraCurricularVariacionId).SelectMany(
+                                anterioresValido =>
+                                anterioresValido.DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos)).Sum
+                                (detalleInfo => detalleInfo.UnidadesAprobacion);
+
+                        sumaCreditos += creditosAnteriores;
+
+                        if (sumaCreditos > autorizacionCreditosComponentes.First().NumeroCreditosComponentes)
+                        {
+                            response.esValido = false;
+                            response.Mensaje = string.Format(Mensajes.ValidacionNumeroMaximoCredito,
+                                                             autorizacionCreditosComponentes.First().
+                                                                 NumeroCreditosComponentes);
+                            return response;
+                        }
+                        return response;
+                    }
+
+                    if (SistemaEstudio.FormaAprobacionCodigo == CodigosVariablesNegocio.FORMA_APROBACION_COMPONENTES)
+                    {
+                        int sumaComponentes = DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos).Count;
+
+                        int componentesAnteriores =
+                            SolicitudesMatriculaAnterioresValidos.Where(
+                            whr => whr.ProgramaAcademicoId == ProgramaAcademicoId &&
+                            whr.PeriodoAcademicoId == PeriodoAcademicoId &&
+                            whr.VariacionId == EstructuraCurricularVariacionId).Sum(
+                                solicitudesMatriculaAnterioresValido =>
+                                solicitudesMatriculaAnterioresValido.DetallesPorContexto(
+                                    DetallesPorContextoSolicitudMatricula.Validos).Count);
+                        sumaComponentes += componentesAnteriores;
+
+                        if (sumaComponentes > autorizacionCreditosComponentes.First().NumeroCreditosComponentes)
+                        {
+                            response.esValido = false;
+                            response.Mensaje = string.Format(Mensajes.ValidacionNumeroMaximoComponente,
+                                                             autorizacionCreditosComponentes.First().
+                                                                 NumeroCreditosComponentes);
+                            return response;
+                        }
+                        return response;
+                    }
+                }
+                response.esValido = false;
+                response.Mensaje = respuesta.Motivo;
+                return response;
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// Realiza la validacion de Numero Maximo de Componentes Educativos al seleccionar un componente
+        /// </summary>
+        /// <returns> objeto ResultadoValidacion </returns>
+        public ResultadoValidacion ValidarNumeroMaximoComponentesObligatorio(int componenteId)
+        {
+            var response = new ResultadoValidacion();
+            var listComponenteGrupo = ComponenteGrupalObligatorioList.Get(ProgramaAcademicoId);
+
+            if (listComponenteGrupo != null && listComponenteGrupo.Count > 0)
+            {
+                int totalCreditos = 0;
+                int codGrupoObligatorio = 0;
+                int cantidadCreditosAnteriores = 0;
+                int cantidadCreditosIng = 0;
+                int valorMaximo = 0;
+                string nombreGrupo = string.Empty;
+
+                foreach (var registro in listComponenteGrupo)
+                {
+                    codGrupoObligatorio = registro.Componentes.Where(y => y.CodigoComponenteEdu == componenteId).Select(z => z.CodigoObligatorio).FirstOrDefault();
+                    if (codGrupoObligatorio != 0)
+                        break;
+                }
+
+                if (codGrupoObligatorio == 0)
+                {
+                    return response;
+                }
+
+                var encabezadoGrupoObligatorio = listComponenteGrupo.Where(x => x.Id == codGrupoObligatorio).FirstOrDefault();
+                var listComponenteDet = listComponenteGrupo.Where(x => x.Id == codGrupoObligatorio).FirstOrDefault().Componentes;
+                var creditosAnteriores = ObtenerCreditosAnteriores();
+                // var coesSolicitados = ObtenerListaCoesSeleccionados().Where(y => !y.CanceladoEnMemoria).ToList();
+                var coesSolicitados = ObtenerListaCoesSeleccionados();
+                coesSolicitados.ForEach(x =>
+                {
+                    bool exitsComponente = listComponenteDet.Exists(y => y.CodigoComponenteEdu == x.ComponenteEducativoId);
+                    if (exitsComponente)
+                        cantidadCreditosIng++;
+                });
+
+                creditosAnteriores.ToList().ForEach(x =>
+                {
+                    bool exitsComponente = listComponenteDet.Exists(y => y.CodigoComponenteEdu == x.ComponenteEducativoId);
+                    if (exitsComponente)
+                        cantidadCreditosAnteriores++;
+                });
+
+                valorMaximo = encabezadoGrupoObligatorio.MaximoComponente;
+                totalCreditos = cantidadCreditosAnteriores + cantidadCreditosIng;
+
+                if (totalCreditos > valorMaximo)
+                {
+                    nombreGrupo = encabezadoGrupoObligatorio.NombreGrupo;
+                    response.esValido = false;
+                    response.Mensaje = string.Format(Mensajes.SeleccionNumeroMaximoComponente,
+                                                                 valorMaximo.ToString(), nombreGrupo);
+                }
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// Realiza la validacion de Numero Mínimo de Componentes Obligatorios Educativos al guardar.
+        /// </summary>
+        /// <returns> objeto ResultadoValidacion </returns>
+        public ResultadoValidacion ValidarNumeroMinimoComponentesObligatorio(List<AutorizacionPotencialComponenteInfo> autorizacionPotencialComponenteInfos)
+        {
+            var response = new ResultadoValidacion();
+            var listComponenteGrupo = ComponenteGrupalObligatorioList.Get(ProgramaAcademicoId);
+
+            if (listComponenteGrupo != null && listComponenteGrupo.Count > 0)
+            {
+                var creditosAnteriores = ObtenerCreditosAnteriores().ToList();
+                var listaComponentesValidos = ObtenerListaCoesSeleccionados();
+
+                int codigo = ComponenteEducativoMatriculaEstadoLookup.GetNameValueList().ObtenerItemId(CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_SOLICITADO);
+                listaComponentesValidos = listaComponentesValidos.Where(x => x.EstadoId == codigo).ToList();
+
+                listComponenteGrupo.ToList().ForEach(x =>
+                {
+
+                    int totalCreditos = 0;
+                    int cantidadCreditosAnteriores = 0;
+                    int cantidadCreditosIng = 0;
+                    int valorMinimo = x.MinimoComponente;
+
+                    //var listComponenteDet = x.Componentes;
+                    var listComponenteDet = ListaComponentesOfertados(x);
+
+                    int totalOfertados = valorMinimo < listComponenteDet.Count() ? valorMinimo : listComponenteDet.Count();
+
+                    List<int> itemsDetalles = new List<int>();
+                    List<int> itemsAnteriores = new List<int>();
+                    itemsDetalles.AddRange(listaComponentesValidos.Select(itemDet => itemDet.ComponenteEducativoId));
+                    itemsAnteriores.AddRange(creditosAnteriores.Select(itemDet => itemDet.ComponenteEducativoId));
+                    cantidadCreditosIng = listComponenteDet.Where(p => itemsDetalles.Contains(p.CodigoComponenteEdu)).Count();
+                    cantidadCreditosAnteriores = listComponenteDet.Where(p => itemsAnteriores.Contains(p.CodigoComponenteEdu)).Count();
+                    totalCreditos = cantidadCreditosAnteriores + cantidadCreditosIng;
+
+                    if (totalCreditos < totalOfertados)
+                    {
+                        response.esValido = false;
+                        x.EsValido = false;
+                    }
+                });
+
+                if (!response.esValido)
+                {
+                    response.Mensaje = CrearMensajeValidacionGruposObligatorios(listComponenteGrupo);
+                }
+            }
+            return response;
+        }
+
+        private List<ComponenteGrupalObligatorioDetInfo> ListaComponentesOfertados(ComponenteGrupalObligatorioInfo x)
+        {
+            var listComponenteDet = x.Componentes.Where(y => VerificarComponenteOfertadoCmd.Execute(y.CodigoComponenteEdu, EstructuraCurricularVariacionId, PeriodoAcademicoId)).ToList();
+
+            List<ImpedimentosEstudianteInfo> lstImpedimentoNoAutorizados = this.GetImpedimentosNoAutorizados();
+            lstImpedimentoNoAutorizados.ForEach(z =>
+            {
+                ComponenteGrupalObligatorioDetInfo itemComponente = listComponenteDet.Where(y => y.CodigoComponenteEdu == z.ComponenteEducativoId).FirstOrDefault();
+                if (itemComponente != null)
+                    listComponenteDet.Remove(itemComponente);
+            });
+
+            var lst = new List<ComponenteGrupalObligatorioDetInfo>();
+
+            this.ComponentesDentroPotencial.ForEach(itm =>
+            {
+                ComponenteGrupalObligatorioDetInfo ptmatri = listComponenteDet.Where(y => y.CodigoComponenteEdu == itm.ComponenteEducativoId).FirstOrDefault();
+                if (ptmatri != null)
+                {
+                    bool existItem = lst.Exists(item => item.CodigoComponenteEdu == ptmatri.CodigoComponenteEdu);
+                    if (!existItem)
+                        lst.Add(ptmatri);
+                }
+            });
+
+            listComponenteDet = lst;
+
+            return listComponenteDet;
+        }
+
+        /// <summary>
+        /// Crea el mensaje de validacion para los grupos obligatorios.
+        /// </summary>
+        /// <param name="listComponenteGrupo">La lista componente grupo.</param>
+        /// <returns></returns>
+        private string CrearMensajeValidacionGruposObligatorios(ComponenteGrupalObligatorioList listComponenteGrupo)
+        {
+
+            StringBuilder sbMensaje = new StringBuilder();
+            listComponenteGrupo.Where(x => !x.EsValido).ToList().ForEach(x =>
+            {
+                var listComponenteDet = ListaComponentesOfertados(x);
+
+
+                if (listComponenteDet.Any())
+                {
+                    sbMensaje.AppendFormat(Mensajes.ValidacionMinimoComponente, x.NombreGrupo, x.MinimoComponente, x.MaximoComponente);
+                    foreach (var componente in listComponenteDet)
+                    {
+                        sbMensaje.AppendFormat("<br />&nbsp;&nbsp;&nbsp;-&nbsp;{0}", componente.NombreComponente);
+                    }
+                }
+            });
+
+            return sbMensaje.ToString();
+        }
+
+        /// <summary>
+        /// Obtiene los coes en estado solicitado y no cancelados en memoría.
+        /// </summary>
+        /// <returns></returns>
+        private List<SolicitudMatriculaDetalle> ObtenerListaCoesSeleccionados()
+        {
+            int idEstadoCoeSolicitado = ComponenteEducativoMatriculaEstadoLookup.GetNameValueList().ObtenerItemId(CodigosItems.ITEM_ESTADO_COMPEDU_MATRICULA_SOLICITADO);
+            var lista = Detalles.Where(x => x.EstadoId == idEstadoCoeSolicitado).ToList();
+            //return lista.Where(y => !y.CanceladoEnMemoria).ToList();
+            return lista.ToList();
+        }
+
+        /// <summary>
+        /// Valida si un Coe es incompatible con otro existente.
+        /// </summary>
+        /// <param name="coeId">Id del Coe.</param>
+        /// <param name="coeIncompatible">Coe incompatible.</param>
+        /// <returns>true - false</returns>
+        public bool ValidarCoesIncompatibles(int coeId, ref string coeIncompatible)
+        {
+            var creditosAnteriores = ObtenerCreditosAnteriores();
+
+            var coesIncompatibles = ComponentesIncompatiblesList.Get(new ListarComponentesMatriculados.ComponentesEducativosIncompatiblesCriteria()
+            {
+                CoeId = coeId,
+                ProgramaAcasemicoId = ProgramaAcademicoId
+            });
+
+            foreach (var registro in creditosAnteriores)
+            {
+                if (coesIncompatibles.Where(x => x.CoeIncompatibleId == registro.ComponenteEducativoId).Count() > 0)
+                {
+                    coeIncompatible = registro.ComponenteEducativoNombre;
+                    return false;
+                }
+            }
+
+            var coesSolicitados = ObtenerListaCoesSeleccionados().Where(y => !y.CanceladoEnMemoria).ToList();
+            foreach (var registro in coesSolicitados)
+            {
+                if (coesIncompatibles.Where(x => x.CoeIncompatibleId == registro.ComponenteEducativoId).Count() > 0)
+                {
+                    coeIncompatible = registro.ComponenteEducativoNombre;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Determina si un estudiante se puede matricular, verificando la cantidad de años que 
+        /// han transcurrido desde la última fecha de matrícula.
+        /// </summary>
+        /// <param name="variacionId">Identificador de la variación.</param>
+        /// <param name="maximoAnios">Máximo de años permitidos.</param>
+        /// <returns>true - false</returns>
+        public bool PuedeMatricularse(int variacionId, ref int maximoAnios)
+        {
+            var fechaUltimaMatricula = FechaUltimaMatriculaCmd.Execute(this.EstudianteId, variacionId, this.ProgramaAcademicoId);
+            if (fechaUltimaMatricula.HasValue)
+            {
+                var maximoDias = ObtenerDiasMaximoReingreso();
+
+                var fecha = FechaCreacion - fechaUltimaMatricula;
+                if (fecha.Value.Days <= maximoDias)
+                    return true;
+                else
+                {
+                    maximoAnios = maximoDias / DiasAnio;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Obtiene el número máximo de días para reíngresar.
+        /// </summary>
+        /// <returns>Número de días</returns>
+        private int ObtenerDiasMaximoReingreso()
+        {
+            Utpl.Syllabus.Infrastructure.Bom.IRespuesta respuesta;
+
+            var parametros = new Dictionary<string, object>();
+
+            parametros[VariablesParametrizacion.PROGRAMA_ACADEMICO] = ProgramaAcademicoId;
+            string mensaje = string.Empty;
+            var servicio = ServiceLocator.Current.GetInstance<Utpl.Syllabus.Infrastructure.Parameterization.IParametrizacionServicio>();
+            respuesta = servicio.Validar(CodigosServicios.MATRICULA, CodigosActividad.DIAS_REINGRESO,
+                         parametros, out mensaje);
+
+            var salidas = (Dictionary<string, object>)respuesta.Valor;
+            var dias = Convert.ToInt32(salidas[CodigosVariablesNegocio.NUMERO_MAX_REINGRESO]);
+            return dias;
+        }
+        /// <summary>
+        /// Obtiene los créditos anteriores.
+        /// </summary>
+        /// <returns>Lista de créditos anteriores</returns>
+        private IEnumerable<SolicitudMatriculaDetalleInfo> ObtenerCreditosAnteriores()
+        {
+            var creditosAnteriores =
+                            SolicitudesMatriculaAnterioresValidos.Where(
+                            whr => whr.ProgramaAcademicoId == ProgramaAcademicoId &&
+                            whr.PeriodoAcademicoId == PeriodoAcademicoId &&
+                            whr.VariacionId == EstructuraCurricularVariacionId).SelectMany(
+                                anterioresValido =>
+                                anterioresValido.DetallesPorContexto(DetallesPorContextoSolicitudMatricula.Validos));
+            return creditosAnteriores;
+        }
+        /// <summary>
+        /// Metodo para saber si un requisito es requerido o no 
+        /// </summary>
+        /// <returns></returns>
+        //public bool EsRequerido()
+        //{
+        //    return Requerido == 1;
+        //}
+
+        /// <summary>
+        /// Permite establecer el centro universitario por defecto
+        /// </summary>
+        /// <returns></returns>
+        private void EstablecerCentroUniversitarioPorDefecto(string strNombreUsuarioLogueado)
+        {
+            //1. Verificar si ya tiene mas de una solcitud para restringir seleccion de centro
+            //2. Si es la misma solicitud no retornar ningun centro universiatrio para que pueda combiarse de centro
+            var centroUniversitarioId = CentroUltimaSolicitudCmd.Execute(this.ProgramaAcademicoId, this.EstudianteId,
+                                                                         this.PeriodoAcademicoId, this.Id);
+            if (centroUniversitarioId > 0)
+            {
+                SetProperty(CentroEstudioIdProperty, centroUniversitarioId);
+            }
+            if (this.EstructuraCurricularVariacionId > 0)
+            {
+                SetRequisitos(strNombreUsuarioLogueado);
+            }
+        }
+
+        private void SetProperty(PropertyInfo<int> centroEstudioIdProperty, object centroUniversitarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+    }
+
+    public class IdentificadorEnteroValidoAttribute : Attribute
+    {
+    }
+
+    public class RequeridoAttribute : Attribute
+    {
+    }
+
+    internal interface ILoggerFactory
+    {
+    }
+
+    internal class ServiceLocator
+    {
+        public class Current
+        {
+            public static void GetInstance<T>()
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
+
+    public class ResultadoValidacion
+    {
+    }
+
+    internal class CentroUltimaSolicitudCmd
+    {
+        public static bool Execute(int programaAcademicoId, int estudianteId, int periodoAcademicoId, object id)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal interface ILogger
+    {
+    }
+
+    public class ObjectFactoryAttribute : Attribute
+    {
+        public ObjectFactoryAttribute(string objectSolicitudmatriculaAssemblyUtplSyllabusMatriculaBl)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class PropertyInfo<T>
+    {
+    }
+
+    /// <summary>
+    /// Enumeracion de Proceso a ejecutar para verificar cambio tipo de Matricula
+    /// </summary>
+    public enum EnumVerificarCambioTipoMatricula
+    {
+        /// <summary>
+        /// Cuando cambia de estado solicictada a registrada
+        /// </summary>
+        CambioEstadoValidacion,
+        /// <summary>
+        /// Cuabndo se actualiza la solicitud
+        /// </summary>
+        ActualizacionSolicitud,
+        /// <summary>
+        /// Cuando consulta el sistema financiero
+        /// </summary>
+        ConsultaSistemaFinanciero,
+        /// <summary>
+        /// Cuando cambia de estado por prefactura
+        /// </summary>
+        CambioEstadoPrefacturaTipoMatricula,
+        /// <summary>
+        /// Cuando seleccionan el programa academico UI.
+        /// </summary>
+        SolicitudMatriculaNueva,
+        /// <summary>
+        /// Ejecutar este proceso para el proceso de creacion de solicitud de matricula en linea
+        /// </summary>
+        SolicitudMatriculaOnlineCreacion,
+        /// <summary>
+        /// No aplica tipo de matricula
+        /// </summary>
+        Ninguno
+    }
+
+
+    /// <summary>
+    /// Enumerable de detalles de solicitud de matricula por contexto.
+    /// </summary>
+    public enum DetallesPorContextoSolicitudMatricula
+    {
+        /// <summary>
+        /// Devuelve todos sin excepcion
+        /// </summary>
+        Todos,
+        /// <summary>
+        /// Solo componentes con estado en la solcitud diferente a cancelado y en la Matricula Academicia Detalle diferente a anulado
+        /// </summary>
+        Validos,
+        /// <summary>
+        /// Solo componentes con estado en la solcitud igual a cancelado y en la Matricula Academicia Detalle igual a anulado
+        /// </summary>
+        Invalidos,
+        /// <summary>
+        /// Devuelve los componentes educativos de acuerdo al estado
+        /// Si es valida la solcitud devuelve solo componentes validos,
+        /// Si la solcitud es cancelada, devuelve componentes cancelados
+        /// </summary>
+        PorEstado,
+        /// <summary>
+        /// Devuelve solo componentes aceptados
+        /// </summary>
+        Aceptadas
+    }
+
+
+}

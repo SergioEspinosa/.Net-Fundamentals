@@ -43,21 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComplejidadInnecesaria\Code.cs" />
+    <Compile Include="Fragilidad\Code.cs" />
+    <Compile Include="Inmobilidad\Code.cs" />
+    <Content Include="Opacidad\SolicitudMatricula.txt" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeticionInnecesaria\Code.cs" />
+    <Compile Include="Rigidez\Code.cs" />
+    <Compile Include="Viscocidad\Code.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ComplejidadInnecesaria\" />
-    <Folder Include="Fragilidad\" />
-    <Folder Include="Inmobilidad\" />
-    <Folder Include="Opacidad\" />
-    <Folder Include="RepeticionInnecesaria\" />
-    <Folder Include="Rigidez\" />
-    <Folder Include="Viscocidad\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
