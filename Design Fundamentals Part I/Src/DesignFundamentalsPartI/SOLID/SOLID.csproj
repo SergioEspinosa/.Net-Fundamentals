@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="1. Single Responsability\Before\Code.cs" />
+    <Compile Include="2. Open Closed\Before\Code.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,9 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="1. Single Responsability\After\" />
-    <Folder Include="1. Single Responsability\Before\" />
     <Folder Include="2. Open Closed\After\" />
-    <Folder Include="2. Open Closed\Before\" />
     <Folder Include="3. Liskov Substitution\After\" />
     <Folder Include="3. Liskov Substitution\Before\" />
     <Folder Include="4. Interface segregation\After\" />
