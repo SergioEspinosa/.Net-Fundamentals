@@ -5,6 +5,7 @@ using System.Text;
 
 namespace SOLID._2._Open_Closed.Before
 {
+
     class ServicioEncriptacion
     {
         public string Encriptar(TipoEncriptacion tipo, string texto)

@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2204F34B-6A34-40EA-8D2E-8AF6A6C00584}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{2C307F6E-2F86-488E-806D-AF8A6286C551}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OnionDesign</RootNamespace>
-    <AssemblyName>OnionDesign</AssemblyName>
+    <RootNamespace>HomeWork</RootNamespace>
+    <AssemblyName>HomeWork</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,36 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="After\Core\Contracts\ICheckoutHandler.cs" />
-    <Compile Include="After\Core\Contracts\IOrderRepository.cs" />
-    <Compile Include="After\Core\Contracts\IPaymentService.cs" />
-    <Compile Include="After\Core\Contracts\IShoppingCartService.cs" />
-    <Compile Include="After\Core\Contracts\IShoppingCartRepository.cs" />
-    <Compile Include="After\Core\Exceptions\CheckoutException.cs" />
-    <Compile Include="After\Core\Handlers\CheckoutHandler.cs" />
-    <Compile Include="After\Core\Models\CheckoutHandlerRequest.cs" />
-    <Compile Include="After\Core\Models\CheckoutHandlerResponse.cs" />
-    <Compile Include="After\Core\Models\CheckoutValidation.cs" />
-    <Compile Include="After\Core\Models\Order.cs" />
-    <Compile Include="After\Core\Services\PaypalPaymentService.cs" />
-    <Compile Include="After\Core\Services\ShoppingCartService.cs" />
-    <Compile Include="After\Infraestructure\Repositories\OrderRepository.cs" />
-    <Compile Include="After\Infraestructure\Repositories\ShoppingCartRepository.cs" />
-    <Compile Include="After\UI\ApiController.cs" />
-    <Compile Include="After\UI\CheckoutCompleteController.cs" />
-    <Compile Include="Before\1.UI\ApiController.cs" />
-    <Compile Include="Before\1.UI\CheckoutCompleteController.cs" />
-    <Compile Include="Before\2.Logic\NVPAPICaller.cs" />
-    <Compile Include="Before\2.Logic\NVPCodec.cs" />
-    <Compile Include="Before\2.Logic\ShoppingCartActions.cs" />
-    <Compile Include="Before\3.Data\OrderRepository.cs" />
-    <Compile Include="Before\3.Data\ShoppingCartRepository.cs" />
-    <Compile Include="Before\4.Model\Order.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SOLID\Code.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Before\CodeMap.dgml" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CodeSmells\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,36 +1,38 @@
-﻿
-namespace SOLID._5._Dependency_inversion.Before
+﻿namespace SOLID._5._Dependency_inversion.After
 {
     namespace HighLevel.Important
     {
-        using SOLID._5._Dependency_inversion.Before.LowLevel.Plugin;
-
         class HighLevelClass
         {
+            private readonly ILowLevel lowLevel;
+            public HighLevelClass(ILowLevel lowLevel)
+            {
+                this.lowLevel = lowLevel;
+            }
+
             void Execute()
             {
-                ILowLevel lowLevel = new LowLevelClass();
                 var param = lowLevel.Get(1);
-
                 //CODE
-
                 lowLevel.Save(param);
             }
+        }
+                
+        public interface ILowLevel
+        {
+            object Get(int id);
+            void Save(object value);
         }
     }
 
     namespace LowLevel.Plugin
     {
+        using SOLID._5._Dependency_inversion.After.HighLevel.Important;
+
         class LowLevelClass : ILowLevel
         {
             public object Get(int id) { return null; }
             public void Save(object value) { }
-        }
-
-        public interface ILowLevel
-        {
-            object Get(int id);
-            void Save(object value);
         }
     }
 }

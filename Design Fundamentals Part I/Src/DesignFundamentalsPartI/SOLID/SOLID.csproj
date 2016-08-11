@@ -44,10 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="1. Single Responsability\After\Code.cs" />
     <Compile Include="1. Single Responsability\Before\Code.cs" />
+    <Compile Include="2. Open Closed\After\Code.cs" />
     <Compile Include="2. Open Closed\Before\Code.cs" />
+    <Compile Include="3. Liskov Substitution\After\Code.cs" />
     <Compile Include="3. Liskov Substitution\Before\Code.cs" />
+    <Compile Include="4. Interface segregation\After\Code.cs" />
     <Compile Include="4. Interface segregation\Before\Code.cs" />
+    <Compile Include="5. Dependency inversion\After\Code.cs" />
     <Compile Include="5. Dependency inversion\Before\Code.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,13 +60,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="1. Single Responsability\After\" />
-    <Folder Include="2. Open Closed\After\" />
-    <Folder Include="3. Liskov Substitution\After\" />
-    <Folder Include="4. Interface segregation\After\" />
-    <Folder Include="5. Dependency inversion\After\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
