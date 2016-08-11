@@ -6,7 +6,7 @@ namespace OnionDesign.After.Infraestructure.Repositories
 {
     public class ShoppingCartRepository : IShoppingCartRepository
     {
-        public List<int> GetItems(string id)
+        public List<int> GetItems(int id)
         {
             throw new NotImplementedException();
         }

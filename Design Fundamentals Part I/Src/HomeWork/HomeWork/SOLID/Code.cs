@@ -3,7 +3,7 @@
 namespace HomeWork.SOLID
 {
     //Que principio SOLID incumple este codigo?
-    //Que pasa si quiero saber el area de un Rectabgulo?
+    //Que pasa si quiero saber el area de un Rectangulo?
 
     public class Square
     {

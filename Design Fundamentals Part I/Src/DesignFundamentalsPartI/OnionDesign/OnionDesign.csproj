@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="After\CodeMap.dgml" />
     <None Include="Before\CodeMap.dgml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
