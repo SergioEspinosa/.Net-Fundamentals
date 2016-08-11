@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<DirectedGraph DataVirtualized="True" GraphDirection="LeftToRight" Layout="Sugiyama" ZoomLevel="-1" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+<DirectedGraph DataVirtualized="True" GraphDirection="LeftToRight" Layout="Sugiyama" ZoomLevel="1.25" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="@2" Category="CodeSchema_Assembly" Bounds="20,35.3526426160338,914.120126582278,269.862183122363" CodeSchemaProperty_StrongName="OnionDesign, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DelayedChildNodesState="Incomplete" DelayedCrossGroupLinksState="Fetched" FetchedChildrenCount="11" FilePath="$(2204f34b-6a34-40ea-8d2e-8af6a6c00584.OutputPath)" Group="Expanded" Label="OnionDesign.dll" />
-    <Node Id="@3" Category="CodeSchema_Namespace" Bounds="40,168.5,182.81,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎._1‎.UI" />
-    <Node Id="@4" Category="CodeSchema_Namespace" Bounds="369.282573839663,202.594064697609,235.133333333333,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Contracts" UseManualLocation="True" />
-    <Node Id="@5" Category="CodeSchema_Namespace" Bounds="372.090450070324,260.214725738397,231.766666666667,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Handlers" UseManualLocation="True" />
-    <Node Id="@6" Category="CodeSchema_Namespace" Bounds="690.136793248945,183.358902953586,223.983333333333,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Models" UseManualLocation="True" />
-    <Node Id="@7" Category="CodeSchema_Namespace" Bounds="354.550246132208,138.782194092827,227.223333333333,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Services" UseManualLocation="True" />
-    <Node Id="@8" Category="CodeSchema_Namespace" Bounds="247.857032348805,75.3527426160338,301.926666666667,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Infraestructure‎.Repositories" UseManualLocation="True" />
-    <Node Id="Onion Architecture{8AB96808-5D00-4F4D-A46D-AFD06D8D4CF1}" Category="CodeMap_SolutionFolder" Bounds="0,-4.64745738396624,954.120126582278,329.862383122363" Group="Expanded" Label="Onion Architecture" />
+    <Node Id="@2" Category="CodeSchema_Assembly" Bounds="-132,-16.6473573839663,914.120126582278,269.862183122363" CodeSchemaProperty_StrongName="OnionDesign, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DelayedChildNodesState="Incomplete" DelayedCrossGroupLinksState="Fetched" FetchedChildrenCount="11" FilePath="$(2204f34b-6a34-40ea-8d2e-8af6a6c00584.OutputPath)" Group="Expanded" Label="OnionDesign.dll" />
+    <Node Id="@3" Category="CodeSchema_Namespace" Bounds="-112,116.5,182.81,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎._1‎.UI" />
+    <Node Id="@4" Category="CodeSchema_Namespace" Bounds="217.282573839662,150.594064697609,235.133333333333,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Contracts" UseManualLocation="True" />
+    <Node Id="@5" Category="CodeSchema_Namespace" Bounds="220.090450070324,208.214725738397,231.766666666667,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Handlers" UseManualLocation="True" />
+    <Node Id="@6" Category="CodeSchema_Namespace" Bounds="538.136793248945,131.358902953586,223.983333333333,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Models" UseManualLocation="True" />
+    <Node Id="@7" Category="CodeSchema_Namespace" Bounds="202.550246132208,86.782194092827,227.223333333333,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Core‎.Services" UseManualLocation="True" />
+    <Node Id="@8" Category="CodeSchema_Namespace" Bounds="95.8570323488044,23.3527426160338,301.926666666667,25" DelayedChildNodesState="NotFetched" DelayedCrossGroupLinksState="Fetched" Group="Collapsed" Label="OnionDesign‎.After‎.Infraestructure‎.Repositories" UseManualLocation="True" />
+    <Node Id="Onion Architecture{8AB96808-5D00-4F4D-A46D-AFD06D8D4CF1}" Category="CodeMap_SolutionFolder" Bounds="-152,-56.6474573839662,954.120126582278,329.862383122363" Group="Expanded" Label="Onion Architecture" UseManualLocation="True" />
   </Nodes>
   <Links>
     <Link Source="@2" Target="@3" Category="Contains" FetchingParent="@2" />
@@ -17,33 +17,33 @@
     <Link Source="@2" Target="@6" Category="Contains" FetchingParent="@2" />
     <Link Source="@2" Target="@7" Category="Contains" FetchingParent="@2" />
     <Link Source="@2" Target="@8" Category="Contains" FetchingParent="@2" />
-    <Link Source="@3" Target="@4" Category="References" Bounds="222.65064898328,189.752244952344,139.231854638499,13.3550619732958" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2">
+    <Link Source="@3" Target="@4" Category="References" Bounds="70.6506489832799,137.752244952344,139.231854638499,13.3550619732958" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2">
       <Category Ref="CodeSchema_Calls" />
     </Link>
-    <Link Source="@3" Target="@5" Category="CodeSchema_Calls" Bounds="180.002537163868,193.5,250.657423698237,64.4727691788767" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="1" />
-    <Link Source="@3" Target="@6" Category="CodeSchema_Calls" Bounds="222.81,183.024944862736,458.329000944541,10.1536125584544" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
-    <Link Source="@3" Target="@7" Category="CodeSchema_Calls" Bounds="222.778155295868,162.041721305185,123.458700904719,10.8948668062812" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
-    <Link Source="@3" Target="@8" Category="CodeSchema_Calls" Bounds="167.291102982589,103.313204979887,187.144003135734,65.1867950201126" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
-    <Link Source="@4" Target="@6" Category="References" Bounds="604.415907172996,203.239576475424,76.7375894100263,4.68175462662538" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="6">
+    <Link Source="@3" Target="@5" Category="CodeSchema_Calls" Bounds="28.0025371638683,141.5,250.657423698237,64.4727691788766" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="1" />
+    <Link Source="@3" Target="@6" Category="CodeSchema_Calls" Bounds="70.81,131.024944862736,458.329000944541,10.1536125584544" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
+    <Link Source="@3" Target="@7" Category="CodeSchema_Calls" Bounds="70.7781552958676,110.041721305185,123.458700904719,10.8948668062812" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
+    <Link Source="@3" Target="@8" Category="CodeSchema_Calls" Bounds="15.2911029825888,51.3132049798875,187.144003135734,65.1867950201126" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
+    <Link Source="@4" Target="@6" Category="References" Bounds="452.415907172996,151.239576475424,76.7375894100266,4.68175462662541" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="6">
       <Category Ref="CodeSchema_ReturnTypeLink" />
     </Link>
-    <Link Source="@5" Target="@4" Category="References" Bounds="487.268807809999,236.592351197826,0.461021672223012,23.6223745405711" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="11">
+    <Link Source="@5" Target="@4" Category="References" Bounds="335.268807809999,184.592351197826,0.461021672223069,23.622374540571" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="11">
       <Category Ref="CodeSchema_Calls" />
       <Category Ref="Implements" />
     </Link>
-    <Link Source="@5" Target="@6" Category="References" Bounds="539.068590720918,210.497620776277,203.222871872925,49.7171049621201" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="10">
+    <Link Source="@5" Target="@6" Category="References" Bounds="387.068590720918,158.497620776277,203.222871872925,49.7171049621201" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="10">
       <Category Ref="CodeSchema_Calls" />
       <Category Ref="CodeSchema_ReturnTypeLink" />
     </Link>
-    <Link Source="@7" Target="@4" Category="References" Bounds="471.82254199105,163.782194092827,8.83664871612268,30.1746238563685" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="6">
+    <Link Source="@7" Target="@4" Category="References" Bounds="319.82254199105,111.782194092827,8.83664871612268,30.1746238563685" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="6">
       <Category Ref="CodeSchema_Calls" />
       <Category Ref="Implements" />
     </Link>
-    <Link Source="@7" Target="@6" Category="References" Bounds="561.811308316139,163.782194092827,137.746872460275,18.3859799227002" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2">
+    <Link Source="@7" Target="@6" Category="References" Bounds="409.811308316139,111.782194092827,137.746872460275,18.3859799227002" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2">
       <Category Ref="CodeSchema_ReturnTypeLink" />
     </Link>
-    <Link Source="@8" Target="@4" Category="Implements" Bounds="343.843658447266,100.352745056152,90.3276062011719,99.7728652954102" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
-    <Link Source="@8" Target="@6" Category="References" Bounds="445.496880819447,100.352742616034,301.261408710687,80.6779940148865" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2">
+    <Link Source="@8" Target="@4" Category="Implements" Bounds="191.843643188477,48.3527412414551,90.3276214599609,99.7728691101074" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2" />
+    <Link Source="@8" Target="@6" Category="References" Bounds="293.496880819447,48.3527426160338,301.261408710687,80.6779940148865" IsSourceVirtualized="True" IsTargetVirtualized="True" Weight="2">
       <Category Ref="CodeSchema_ReturnTypeLink" />
     </Link>
     <Link Source="Onion Architecture{8AB96808-5D00-4F4D-A46D-AFD06D8D4CF1}" Target="@2" Category="Contains" FetchingParent="Onion Architecture{8AB96808-5D00-4F4D-A46D-AFD06D8D4CF1}" />
