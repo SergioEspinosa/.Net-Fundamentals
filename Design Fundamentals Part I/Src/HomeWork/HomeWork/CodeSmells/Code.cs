@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
 
 namespace HomeWork.CodeSmells
 {
@@ -29,13 +25,46 @@ namespace HomeWork.CodeSmells
     public interface ILogic { void Add(Person person); }
     public class Logic : ILogic
     {
-        public void Add(Person person) { new NotificationLogin().Add(person); }
+        public void Add(Person person) { new NotificationLogin().Send(person); }
     }
 
-    public interface INotification { void Add(Person person); }
+    public interface INotification { void Send(Person person); }
     public class NotificationLogin : INotification
     {
-        public void Add(Person person) { }
+        public void Send(Person person) {
+            MailMessage mail = new MailMessage("you@yourcompany.com", "user@hotmail.com");
+            SmtpClient client = new SmtpClient();
+            client.Port = 25;
+            client.Host = "smtp.google.com";
+            mail.Subject = "NotificationLogin";
+            mail.Body = "this is my test email body";
+            client.Send(mail);
+        }
+    }
+    public class NotificationCheckin : INotification
+    {
+        public void Send(Person person) {
+            MailMessage mail = new MailMessage("you@yourcompany.com", "user@hotmail.com");
+            SmtpClient client = new SmtpClient();
+            client.Port = 25;
+            client.Host = "smtp.google.com";
+            mail.Subject = "NotificationCheckin";
+            mail.Body = "this is my test email body";
+            client.Send(mail);
+        }
+    }
+    public class NotificationCheckout : INotification
+    {
+        public void Send(Person person)
+        {
+            MailMessage mail = new MailMessage("you@yourcompany.com", "user@hotmail.com");
+            SmtpClient client = new SmtpClient();
+            client.Port = 25;
+            client.Host = "smtp.google.com";
+            mail.Subject = "NotificationCheckout";
+            mail.Body = "this is my test email body";
+            client.Send(mail);
+        }
     }
 
     public class Person { }
