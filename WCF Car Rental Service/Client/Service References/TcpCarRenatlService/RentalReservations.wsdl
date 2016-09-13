@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="RentalReservations" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IReservations_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:8595/CarRentalService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8595/CarRentalService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8595/CarRentalService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/CarRentalService" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IReservations_Check_InputMessage">
+    <wsdl:part name="parameters" element="tns:Check" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_Check_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_Reserve_InputMessage">
+    <wsdl:part name="parameters" element="tns:Reserve" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_Reserve_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReserveResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_Cancel_InputMessage">
+    <wsdl:part name="parameters" element="tns:Cancel" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_Cancel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_GetStats_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStats" />
+  </wsdl:message>
+  <wsdl:message name="IReservations_GetStats_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStatsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IReservations">
+    <wsdl:operation name="Check">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReservations/Check" message="tns:IReservations_Check_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReservations/CheckResponse" message="tns:IReservations_Check_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Reserve">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReservations/Reserve" message="tns:IReservations_Reserve_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReservations/ReserveResponse" message="tns:IReservations_Reserve_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Cancel">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReservations/Cancel" message="tns:IReservations_Cancel_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReservations/CancelResponse" message="tns:IReservations_Cancel_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStats">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReservations/GetStats" message="tns:IReservations_GetStats_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReservations/GetStatsResponse" message="tns:IReservations_GetStats_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IReservations" type="tns:IReservations">
+    <wsp:PolicyReference URI="#NetTcpBinding_IReservations_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Check">
+      <soap12:operation soapAction="http://tempuri.org/IReservations/Check" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Reserve">
+      <soap12:operation soapAction="http://tempuri.org/IReservations/Reserve" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Cancel">
+      <soap12:operation soapAction="http://tempuri.org/IReservations/Cancel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStats">
+      <soap12:operation soapAction="http://tempuri.org/IReservations/GetStats" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RentalReservations">
+    <wsdl:port name="NetTcpBinding_IReservations" binding="tns:NetTcpBinding_IReservations">
+      <soap12:address location="net.tcp://localhost:8523/CarRentalService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8523/CarRentalService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>DESKTOP-E2HD9NN\HP</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

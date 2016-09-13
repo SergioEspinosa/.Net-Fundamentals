@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="20bdc6fc-1f77-4eda-98e1-6ac98a7fd683" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://localhost:44314/RentalReservationService.svc?wsdl" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="RentalReservations1.wsdl" MetadataType="Wsdl" ID="dc66b637-3063-4786-bb1c-c1626def392c" SourceId="1" SourceUrl="https://localhost:44314/RentalReservationService.svc?wsdl" />
+    <MetadataFile FileName="RentalReservationService3.xsd" MetadataType="Schema" ID="1f8cf1de-653c-4779-aed3-c1a319b32322" SourceId="1" SourceUrl="https://localhost:44314/RentalReservationService.svc?xsd=xsd1" />
+    <MetadataFile FileName="RentalReservationService31.xsd" MetadataType="Schema" ID="114b0a41-80a9-457a-838c-79c1a99054d1" SourceId="1" SourceUrl="https://localhost:44314/RentalReservationService.svc?xsd=xsd0" />
+    <MetadataFile FileName="RentalReservationService32.xsd" MetadataType="Schema" ID="6b885920-6c89-4b5f-8f17-d2186b090821" SourceId="1" SourceUrl="https://localhost:44314/RentalReservationService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
